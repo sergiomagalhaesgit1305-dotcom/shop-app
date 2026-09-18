@@ -408,7 +408,10 @@ app.delete("/cart/:product_id", async (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie("access_token");
+  res.clearCookie("access_token", {
+    secure: true,
+    sameSite: "none",
+  });
   return res.json({ message: "Sessao encerrada com sucesso" });
 });
 

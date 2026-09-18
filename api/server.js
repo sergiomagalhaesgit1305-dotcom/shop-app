@@ -6,8 +6,15 @@ const { createClient } = require("@supabase/supabase-js");
 
 const app = express();
 
+const PORT = process.env.PORT || 3000;
+
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://shop-app-rosy-phi.vercel.app/"],
+    credentials: true,
+  }),
+);
 app.use(cookieParser());
 
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -401,6 +408,6 @@ app.post("/logout", (req, res) => {
   return res.json({ message: "Sessao encerrada com sucesso" });
 });
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log("Servidor a rodar na porta 3000");
 });

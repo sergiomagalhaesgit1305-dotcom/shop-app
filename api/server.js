@@ -21,6 +21,10 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+app.get("/", (req, res) => {
+  res.send("API a funcionar com sucesso!");
+});
+
 app.post("/register", async (req, res) => {
   const { email, username, password } = req.body;
 

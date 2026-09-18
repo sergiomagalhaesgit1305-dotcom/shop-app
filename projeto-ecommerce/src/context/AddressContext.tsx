@@ -87,7 +87,7 @@ export const AddressProvider = ({ children }: TChildren) => {
 
       return await response.json();
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["address"] });
 
       setStreet("");

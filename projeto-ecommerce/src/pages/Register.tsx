@@ -44,7 +44,7 @@ export const Register = () => {
 
       return data;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       navigate("/");
     },
   });

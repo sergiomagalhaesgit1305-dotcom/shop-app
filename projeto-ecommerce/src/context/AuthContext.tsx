@@ -90,7 +90,7 @@ export const AuthProvider = ({ children }: TChildren) => {
 
       return await response.json();
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.setQueryData(["user"], null);
       queryClient.invalidateQueries({ queryKey: ["user"] });
       queryClient.invalidateQueries({ queryKey: ["cart"] });

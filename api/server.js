@@ -86,8 +86,8 @@ app.post("/login", async (req, res) => {
 
   res.cookie("access_token", authData.session.access_token, {
     httpOnly: true, // Esconde o cookie do JavaScript (Super seguro!)
-    secure: false, // Em desenvolvimento local deve ser false. Na internet usa true (HTTPS)
-    sameSite: "lax", // Protege contra vulnerabilidades CSRF
+    secure: true, // Em desenvolvimento local deve ser false. Na internet usa true (HTTPS)
+    sameSite: "none", // Protege contra vulnerabilidades CSRF
     maxAge: 86400000,
   });
 

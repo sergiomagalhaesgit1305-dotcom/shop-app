@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import type { TChildren } from "../types/TypeChildren";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { API_URL } from "../API_URL";
 
 type TAddress = {
   id: string;
@@ -56,7 +57,7 @@ export const AddressProvider = ({ children }: TChildren) => {
   const { data } = useQuery<TAddress[]>({
     queryKey: ["address"],
     queryFn: async () => {
-      const response = await fetch("http://localhost:3000/address", {
+      const response = await fetch(`${API_URL}/address`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -74,7 +75,7 @@ export const AddressProvider = ({ children }: TChildren) => {
 
   const { mutate } = useMutation({
     mutationFn: async () => {
-      const response = await fetch("http://localhost:3000/address", {
+      const response = await fetch(`${API_URL}/address`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ street, postal_code, city, phone }),

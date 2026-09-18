@@ -1,6 +1,7 @@
 import { createContext, useContext } from "react";
 import type { TChildren } from "../types/TypeChildren";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { API_URL } from "../API_URL";
 
 type TCart = {
   user_id: string;
@@ -33,7 +34,7 @@ export const CartProvider = ({ children }: TChildren) => {
   const { data } = useQuery<TCart[]>({
     queryKey: ["cart"],
     queryFn: async () => {
-      const response = await fetch("http://localhost:3000/cart", {
+      const response = await fetch(`${API_URL}/cart`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -58,7 +59,7 @@ export const CartProvider = ({ children }: TChildren) => {
     quantity: number,
   ) => {
     try {
-      const response = await fetch("http://localhost:3000/cart", {
+      const response = await fetch(`${API_URL}/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,13 +86,13 @@ export const CartProvider = ({ children }: TChildren) => {
 
   const handleAddItem = async (product_id: string) => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/cart/addItem/${product_id}`,
-        {
-          method: "PATCH",
-          credentials: "include",
+      const response = await fetch(`${API_URL}/cart/addItem/${product_id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        credentials: "include",
+      });
 
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
@@ -105,14 +106,11 @@ export const CartProvider = ({ children }: TChildren) => {
 
   const handleDecreaseItem = async (product_id: string) => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/cart/removeItem/${product_id}`,
-        {
-          method: "PATCH",
+      const response = await fetch(`${API_URL}/cart/removeItem/${product_id}`, {
+        method: "PATCH",
 
-          credentials: "include",
-        },
-      );
+        credentials: "include",
+      });
 
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
@@ -126,7 +124,7 @@ export const CartProvider = ({ children }: TChildren) => {
 
   const handleRemoveItem = async (product_id: string) => {
     try {
-      const response = await fetch(`http://localhost:3000/cart/${product_id}`, {
+      const response = await fetch(`${API_URL}/cart/${product_id}`, {
         method: "DELETE",
         credentials: "include",
       });

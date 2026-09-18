@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { FormBox } from "../components/FormBox";
+import { API_URL } from "../API_URL";
 
 export const Login = () => {
   const { setUser } = useAuth();
@@ -31,7 +32,7 @@ export const Login = () => {
 
   const { mutate } = useMutation({
     mutationFn: async () => {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

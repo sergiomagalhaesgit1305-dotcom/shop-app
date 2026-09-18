@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import type { TChildren } from "../types/TypeChildren";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../API_URL";
 
 export type User = {
   id: string;
@@ -28,7 +29,7 @@ export const AuthProvider = ({ children }: TChildren) => {
   const { data } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
-      const response = await fetch("http://localhost:3000/me", {
+      const response = await fetch(`${API_URL}/me`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -52,7 +53,7 @@ export const AuthProvider = ({ children }: TChildren) => {
 
   const { mutate: UpdateUsername } = useMutation({
     mutationFn: async () => {
-      const response = await fetch("http://localhost:3000/me", {
+      const response = await fetch(`${API_URL}/me`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username }),
@@ -66,7 +67,9 @@ export const AuthProvider = ({ children }: TChildren) => {
       return await response.json();
     },
     onSuccess: (data) => {
-      setUser(data.username);
+      if (data?.user) {
+        setUser(data.user);
+      }
       queryClient.invalidateQueries({ queryKey: ["user"] });
       navigate("/me");
     },
@@ -79,7 +82,7 @@ export const AuthProvider = ({ children }: TChildren) => {
 
   const { mutate: LogoutMutate } = useMutation({
     mutationFn: async () => {
-      const response = await fetch("http://localhost:3000/logout", {
+      const response = await fetch(`${API_URL}/logout`, {
         method: "POST",
         credentials: "include",
       });

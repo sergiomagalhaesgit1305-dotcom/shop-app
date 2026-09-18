@@ -8,13 +8,13 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://shop-app-rosy-phi.vercel.app/"],
+    origin: ["http://localhost:5173", "https://shop-app-rosy-phi.vercel.app"],
     credentials: true,
   }),
 );
+app.use(express.json());
 app.use(cookieParser());
 
 const supabaseUrl = process.env.SUPABASE_URL;

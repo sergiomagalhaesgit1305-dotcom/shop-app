@@ -10,6 +10,7 @@ import {
   CardContent,
   TextField,
 } from "@mui/material";
+import { API_URL } from "../API_URL";
 
 export const Register = () => {
   const [email, setEmail] = useState<string>("");
@@ -30,7 +31,7 @@ export const Register = () => {
 
   const { mutate } = useMutation({
     mutationFn: async () => {
-      const response = await fetch("http://localhost:3000/register", {
+      const response = await fetch(`${API_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, username, password }),

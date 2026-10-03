@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 import type { TChildren } from "../types/TypeChildren";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "../API_URL";
+import { useAuth } from "./AuthContext";
 
 type TAddress = {
   id: string;
@@ -22,12 +23,14 @@ type TAddressContext = {
   handleCityChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handlePhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  DeleteAddress: (id: string) => void;
 };
 
 const addressContext = createContext<TAddressContext | undefined>(undefined);
 
 export const AddressProvider = ({ children }: TChildren) => {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const [street, setStreet] = useState<string>("");
   const [postal_code, setPostalCode] = useState<string>("");
@@ -59,7 +62,6 @@ export const AddressProvider = ({ children }: TChildren) => {
     queryFn: async () => {
       const response = await fetch(`${API_URL}/address`, {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
         credentials: "include",
       });
 
@@ -73,7 +75,7 @@ export const AddressProvider = ({ children }: TChildren) => {
 
   const address = data || [];
 
-  const { mutate } = useMutation({
+  const { mutate: PostAddress } = useMutation({
     mutationFn: async () => {
       const response = await fetch(`${API_URL}/address`, {
         method: "POST",
@@ -101,8 +103,26 @@ export const AddressProvider = ({ children }: TChildren) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    mutate();
+    PostAddress();
   };
+
+  const { mutate: DeleteAddress } = useMutation({
+    mutationFn: async (id: string) => {
+      const response = await fetch(`${API_URL}/address/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to post data");
+      }
+
+      return await response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["address"] });
+    },
+  });
 
   return (
     <addressContext.Provider
@@ -117,6 +137,7 @@ export const AddressProvider = ({ children }: TChildren) => {
         handleCityChange,
         handlePhoneChange,
         handleSubmit,
+        DeleteAddress,
       }}
     >
       {children}

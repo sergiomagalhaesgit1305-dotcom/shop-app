@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FormBox } from "../components/FormBox";
@@ -9,8 +9,10 @@ import {
   CardActions,
   CardContent,
   TextField,
+  Typography,
 } from "@mui/material";
 import { API_URL } from "../API_URL";
+import { useAuth } from "../context/AuthContext";
 
 export const Register = () => {
   const [email, setEmail] = useState<string>("");
@@ -18,6 +20,7 @@ export const Register = () => {
   const [password, setPassword] = useState<string>("");
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -35,17 +38,17 @@ export const Register = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, username, password }),
+        credentials: "include",
       });
 
       if (!response.ok) {
         throw new Error("Failed to fetch");
       }
 
-      const data = await response.json();
-
-      return data;
+      return await response.json();
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
       navigate("/");
     },
   });
@@ -61,46 +64,79 @@ export const Register = () => {
         sx={{
           minHeight: "100vh",
           display: "flex",
-          justifyContent: "center",
+          flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
+          bgcolor: "background.default",
+          color: "text.primary",
+          p: 2,
         }}
       >
-        <Card sx={{ minWidth: 275 }}>
+        <Card
+          sx={{
+            maxWidth: 440,
+            width: "100%",
+            borderRadius: 2,
+            boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
+          }}
+        >
           <FormBox onSubmit={handleSubmit}>
-            <CardContent>
+            <CardContent sx={{ p: 4 }}>
+              <Typography
+                variant="h5"
+                component="h1"
+                sx={{
+                  fontWeight: 800,
+                  textAlign: "center",
+                  mb: 3,
+                  color: "inherit",
+                }}
+              >
+                Cria a tua conta!
+              </Typography>
               <TextField
                 sx={{ marginBottom: 2 }}
+                required
                 type="email"
                 value={email}
                 onChange={handleEmailChange}
                 label="Email"
                 variant="outlined"
                 fullWidth
-                required
               />
               <TextField
                 sx={{ marginBottom: 2 }}
+                required
                 type="text"
                 value={username}
                 onChange={handleUsernameChange}
-                label="Username"
+                label="Nome de utilizador"
                 variant="outlined"
                 fullWidth
-                required
               />
               <TextField
                 sx={{ marginBottom: 2 }}
+                required
                 type="password"
                 value={password}
                 onChange={handlePasswordChange}
                 label="Password"
                 variant="outlined"
                 fullWidth
-                required
               />
-              <CardActions>
-                <Button type="submit">Cadastrar-se</Button>
-              </CardActions>
+              <Button
+                type="submit"
+                fullWidth
+                sx={{
+                  height: "56px",
+                  backgroundColor: "orange",
+                  color: "white",
+                  "&:hover": { bgcolor: "#e67e00" },
+                  borderRadius: 1,
+                }}
+              >
+                Inciar sessao
+              </Button>
             </CardContent>
           </FormBox>
         </Card>

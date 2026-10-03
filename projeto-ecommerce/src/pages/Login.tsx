@@ -15,7 +15,6 @@ import { FormBox } from "../components/FormBox";
 import { API_URL } from "../API_URL";
 
 export const Login = () => {
-  const { setUser } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -46,7 +45,6 @@ export const Login = () => {
       return await response.json();
     },
     onSuccess: (data) => {
-      setUser(data.user);
       queryClient.invalidateQueries({ queryKey: ["user"] });
       queryClient.invalidateQueries({ queryKey: ["cart"] });
       navigate("/");

@@ -1,7 +1,8 @@
 import { createContext, useContext } from "react";
 import type { TChildren } from "../types/TypeChildren";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "../API_URL";
+import { enqueueSnackbar } from "notistack";
 
 type TCart = {
   user_id: string;
@@ -12,15 +13,17 @@ type TCart = {
   quantity: number;
 };
 
+type TCartOrder = {
+  product_image: string;
+  product_name: string;
+  product_priceCents: number;
+  product_id: string;
+  quantity: number;
+};
+
 type TCartContext = {
   cart: TCart[];
-  handleCart: (
-    product_image: string,
-    product_name: string,
-    product_priceCents: number,
-    product_id: string,
-    quantity: number,
-  ) => void;
+  handleAddToCart: (product: TCartOrder) => void;
   handleRemoveItem: (product_id: string) => void;
   handleDecreaseItem: (product_id: string) => void;
   handleAddItem: (product_id: string) => void;
@@ -51,38 +54,32 @@ export const CartProvider = ({ children }: TChildren) => {
 
   const cart = data || [];
 
-  const handleCart = async (
-    product_image: string,
-    product_name: string,
-    product_priceCents: number,
-    product_id: string,
-    quantity: number,
-  ) => {
-    try {
+  const { mutate: handleAddToCart } = useMutation({
+    mutationFn: async (product: TCartOrder) => {
       const response = await fetch(`${API_URL}/cart`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          product_image,
-          product_name,
-          product_priceCents,
-          product_id,
-          quantity,
+          product,
         }),
+        credentials: "include",
       });
 
       if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
+        throw new Error("Failed to finalize pursache");
       }
 
+      return await response.json();
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
-    } catch (error: any) {
-      console.log(`${error.message}`);
-    }
-  };
+
+      enqueueSnackbar("Produto adicionado ao carrinho com sucesso!", {
+        variant: "success",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+    },
+  });
 
   const handleAddItem = async (product_id: string) => {
     try {
@@ -143,7 +140,7 @@ export const CartProvider = ({ children }: TChildren) => {
     <cartContext.Provider
       value={{
         cart,
-        handleCart,
+        handleAddToCart,
         handleDecreaseItem,
         handleRemoveItem,
         handleAddItem,

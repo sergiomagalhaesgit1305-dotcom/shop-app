@@ -6,8 +6,6 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -20,8 +18,11 @@ import { Button, Switch } from "@mui/material";
 import { useAppTheme } from "./ControlColors";
 import BedtimeOutlinedIcon from "@mui/icons-material/BedtimeOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
-import { CartDrawer } from "../pages/CartDrawer";
+import { CartDrawer } from "../pages/Drawers/CartDrawer";
 import { useSearch } from "../context/SearchContext";
+import { FavoriteDrawer } from "../pages/Drawers/FavoriteDrawer";
+import { ProfileDrawer } from "../pages/Drawers/ProfileDrawer";
+import { LeftDrawer } from "../pages/Drawers/LeftDrawer";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -58,107 +59,45 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
-      width: "40ch",
+      width: "60ch",
     },
   },
 }));
 
 export default function PrimarySearchAppBar() {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    useState<null | HTMLElement>(null);
-
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
+  const [isFavoriteDrawerOpen, setIsFavoriteDrawerOpen] = useState(false);
+  const [isProfileDrawerOpen, setIsProfileDrawerOpen] = useState(false);
+  const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(false);
   const { search, handleChange, handleKeyDown } = useSearch();
 
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const { mode, setMode } = useAppTheme();
 
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
-
-  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-  const menuId = "primary-search-account-menu";
   const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem component={Link} to="/me" onClick={handleMenuClose}>
-        Profile
-      </MenuItem>
-      <MenuItem onClick={logout}>Logout</MenuItem>
-    </Menu>
+    <ProfileDrawer
+      open={isProfileDrawerOpen}
+      onClose={() => setIsProfileDrawerOpen(false)}
+    />
   );
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
+    <ProfileDrawer
+      open={isProfileDrawerOpen}
+      onClose={() => setIsProfileDrawerOpen(false)}
+    />
   );
 
   return (
     <Box sx={{ width: "100%" }}>
       <AppBar position="static" color="default">
-        <Toolbar>
+        <Toolbar sx={{ width: "100%", maxWidth: 1560, mx: "auto" }}>
           <IconButton
             size="large"
             edge="start"
             color="inherit"
             aria-label="open drawer"
+            onClick={() => setIsLeftDrawerOpen(true)}
             sx={{ mr: 2 }}
           >
             <MenuIcon />
@@ -209,8 +148,9 @@ export default function PrimarySearchAppBar() {
                 <IconButton
                   size="large"
                   edge="end"
-                  aria-label="account of current user"
+                  aria-label="Favorites"
                   color="inherit"
+                  onClick={() => setIsFavoriteDrawerOpen(true)}
                 >
                   <FavoriteBorderOutlinedIcon />
                 </IconButton>
@@ -218,9 +158,8 @@ export default function PrimarySearchAppBar() {
                   size="large"
                   edge="end"
                   aria-label="account of current user"
-                  aria-controls={menuId}
                   aria-haspopup="true"
-                  onClick={handleProfileMenuOpen}
+                  onClick={() => setIsProfileDrawerOpen(true)}
                   color="inherit"
                 >
                   <AccountCircle />
@@ -228,7 +167,7 @@ export default function PrimarySearchAppBar() {
                 <IconButton
                   size="large"
                   edge="end"
-                  aria-label="account of current user"
+                  aria-label="Cart"
                   color="inherit"
                   onClick={() => setIsCartDrawerOpen(true)}
                 >
@@ -239,9 +178,8 @@ export default function PrimarySearchAppBar() {
                 <IconButton
                   size="large"
                   aria-label="show more"
-                  aria-controls={mobileMenuId}
                   aria-haspopup="true"
-                  onClick={handleMobileMenuOpen}
+                  onClick={() => setIsProfileDrawerOpen(true)}
                   color="inherit"
                 >
                   <MoreIcon />
@@ -255,9 +193,17 @@ export default function PrimarySearchAppBar() {
           )}
         </Toolbar>
       </AppBar>
+      <FavoriteDrawer
+        open={isFavoriteDrawerOpen}
+        onClose={() => setIsFavoriteDrawerOpen(false)}
+      />
       <CartDrawer
         open={isCartDrawerOpen}
         onClose={() => setIsCartDrawerOpen(false)}
+      />
+      <LeftDrawer
+        open={isLeftDrawerOpen}
+        onClose={() => setIsLeftDrawerOpen(false)}
       />
       {renderMobileMenu}
       {renderMenu}

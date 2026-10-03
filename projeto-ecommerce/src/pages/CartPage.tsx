@@ -14,6 +14,7 @@ import { FormatedPrice } from "../utils/FormatPrice";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import { Link } from "react-router-dom";
 
 export const CartPage = () => {
   const theme = useTheme();
@@ -26,9 +27,11 @@ export const CartPage = () => {
       <Box sx={{ width: "100%" }}>
         <Box
           sx={{
-            width: "95%",
+            width: "100%",
+            maxWidth: 1560,
             mx: "auto",
-            maxWidth: "1620px",
+            gap: 4,
+            px: { md: 3 },
           }}
         >
           <Typography variant="h6" sx={{ mb: 2, mt: 2 }} color="text.secondary">
@@ -265,38 +268,44 @@ export const CartPage = () => {
                       alignItems: "center",
                     }}
                   >
-                    <Button>Continuar a comprar</Button>
+                    <Button component={Link} to="/">
+                      Continuar a comprar
+                    </Button>
 
                     <Button>Limpar carrinho</Button>
                   </CardContent>
                 </Card>
               )}
             </Box>
-            <Card
+            <Box
               sx={{
-                minwidth: 100,
-                height: "fit-content",
                 flex: 1,
-                bgcolor: "background.default",
-                color: "text.primary",
-                borderRadius: 2,
+                display: "flex",
+                flexDirection: "column",
+                gap: 3,
               }}
             >
-              <CardContent>
-                <Typography>Sumário</Typography>
-                <Box>
+              <Card>
+                <CardContent
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 2,
+                    borderRadius: 1,
+                  }}
+                >
+                  <Typography variant="h6" sx={{ fontSize: 20 }}>
+                    Resumo dos Pedidos
+                  </Typography>
+
                   <Box
                     sx={{
-                      bgcolor: "blue",
                       display: "flex",
                       justifyContent: "space-between",
                     }}
                   >
-                    <Typography sx={{ fontWeight: "bold" }}>
-                      {cart.reduce((acc, item) => acc + item.quantity, 0)}{" "}
-                      Produtos
-                    </Typography>
-                    <Typography sx={{ fontWeight: "bold" }}>
+                    <Box>Produtos</Box>
+                    <Typography>
                       {FormatedPrice(
                         cart.reduce(
                           (acc, item) =>
@@ -308,13 +317,12 @@ export const CartPage = () => {
                   </Box>
                   <Box
                     sx={{
-                      bgcolor: "blue",
                       display: "flex",
                       justifyContent: "space-between",
                     }}
                   >
-                    <Typography sx={{ fontWeight: "bold" }}>Iva</Typography>
-                    <Typography sx={{ fontWeight: "bold" }}>
+                    <Typography>Iva</Typography>
+                    <Typography>
                       {FormatedPrice(
                         cart.reduce(
                           (acc, item) =>
@@ -326,13 +334,12 @@ export const CartPage = () => {
                   </Box>
                   <Box
                     sx={{
-                      bgcolor: "blue",
                       display: "flex",
                       justifyContent: "space-between",
                     }}
                   >
-                    <Typography sx={{ fontWeight: "bold" }}>Total</Typography>
-                    <Typography sx={{ fontWeight: "bold" }}>
+                    <Typography sx={{ fontWeight: "bold" }}>TOTAL</Typography>
+                    <Typography>
                       {FormatedPrice(
                         cart.reduce(
                           (acc, item) =>
@@ -342,9 +349,9 @@ export const CartPage = () => {
                       )}
                     </Typography>
                   </Box>
-                </Box>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </Box>
           </Box>
         </Box>
       </Box>

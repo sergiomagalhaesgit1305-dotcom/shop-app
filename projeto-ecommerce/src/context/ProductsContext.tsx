@@ -1,14 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { createContext, useContext, type ReactNode } from "react";
+import { API_URL } from "../API_URL";
 
 export type TProduct = {
   id: string;
   image: string;
   name: string;
-  rating: [stars: number, count: number];
-  priceCents: number;
+  price_cents: number;
   category: string;
   description: string;
+  favorite: boolean;
 };
 
 type TProductContext = {
@@ -17,14 +18,11 @@ type TProductContext = {
 
 const ProductContext = createContext<TProductContext | undefined>(undefined);
 
-const URL =
-  "https://kolzsticks.github.io/Free-Ecommerce-Products-Api/main/products.json";
-
 export const ProductProvider = ({ children }: { children: ReactNode }) => {
   const { data: products = [] } = useQuery<TProduct[]>({
     queryKey: ["products"],
     queryFn: async () => {
-      const response = await fetch(URL);
+      const response = await fetch(`${API_URL}/products`);
 
       if (!response.ok) {
         throw new Error("Erro ao carregar os produtos");

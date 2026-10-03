@@ -8,11 +8,12 @@ export type User = {
   id: string;
   email: string;
   username?: string;
+  role: "user" | "admin";
 };
 
 type AuthContextType = {
   user: User | null;
-  setUser: (user: User | null) => void;
+  isAdmin: boolean;
   logout: () => void;
   handleUsernameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -21,12 +22,12 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: TChildren) => {
-  const [user, setUser] = useState<User | null>(null);
   const [username, setUsername] = useState("");
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { data } = useQuery({
+  const { data: user = null } = useQuery<User | null>({
     queryKey: ["user"],
     queryFn: async () => {
       const response = await fetch(`${API_URL}/me`, {
@@ -39,17 +40,12 @@ export const AuthProvider = ({ children }: TChildren) => {
         throw new Error("Failed to fetch");
       }
 
-      return await response.json();
+      const data = await response.json();
+      return data.user;
     },
   });
 
-  useEffect(() => {
-    if (data?.user) {
-      setUser(data.user);
-    } else {
-      setUser(null);
-    }
-  }, [data]);
+  const isAdmin = user?.role === "admin";
 
   const { mutate: UpdateUsername } = useMutation({
     mutationFn: async () => {
@@ -66,10 +62,7 @@ export const AuthProvider = ({ children }: TChildren) => {
 
       return await response.json();
     },
-    onSuccess: (data) => {
-      if (data?.user) {
-        setUser(data.user);
-      }
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
       navigate("/me");
     },
@@ -97,7 +90,6 @@ export const AuthProvider = ({ children }: TChildren) => {
       queryClient.setQueryData(["user"], null);
       queryClient.invalidateQueries({ queryKey: ["user"] });
       queryClient.invalidateQueries({ queryKey: ["cart"] });
-      setUser(null);
       navigate("/");
     },
   });
@@ -112,7 +104,13 @@ export const AuthProvider = ({ children }: TChildren) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, setUser, handleUsernameChange, handleSubmit, logout }}
+      value={{
+        user,
+        isAdmin,
+        handleUsernameChange,
+        handleSubmit,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>

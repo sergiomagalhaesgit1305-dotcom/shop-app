@@ -10,10 +10,12 @@ import type {
   TOrder,
   TOrderContext,
 } from "../types/TypeOrder";
+import { useAuth } from "./AuthContext";
 
 const OrderContext = createContext<TOrderContext | undefined>(undefined);
 
 export const OrderProvider = ({ children }: TChildren) => {
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -32,6 +34,7 @@ export const OrderProvider = ({ children }: TChildren) => {
 
       return await response.json();
     },
+    enabled: !!user,
   });
 
   const { mutate: FinalizePurchase } = useMutation({

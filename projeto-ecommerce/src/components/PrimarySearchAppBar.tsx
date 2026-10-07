@@ -1,5 +1,5 @@
 import { styled, alpha } from "@mui/material/styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,7 +13,7 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { useAuth } from "../context/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Switch } from "@mui/material";
 import { useAppTheme } from "./ControlColors";
 import BedtimeOutlinedIcon from "@mui/icons-material/BedtimeOutlined";
@@ -65,11 +65,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar() {
+  const navigate = useNavigate();
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
   const [isFavoriteDrawerOpen, setIsFavoriteDrawerOpen] = useState(false);
   const [isProfileDrawerOpen, setIsProfileDrawerOpen] = useState(false);
   const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(false);
   const { search, handleChange, handleKeyDown } = useFilter();
+
+  useEffect(() => {
+    if (search.length === 0) {
+      navigate("/");
+    }
+  }, [search]);
 
   const { user } = useAuth();
   const { mode, setMode } = useAppTheme();

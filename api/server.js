@@ -155,6 +155,10 @@ app.patch("/me/update-password", async (req, res) => {
 });
 
 app.get("/me", async (req, res) => {
+  if (!req.user) {
+    return res.status(200).json({ user: null });
+  }
+
   const token = req.cookies.access_token;
 
   if (!token) {

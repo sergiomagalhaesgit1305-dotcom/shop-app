@@ -4,10 +4,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "../API_URL";
 import { enqueueSnackbar } from "notistack";
 import type { TCart, TCartContext, TCartOrder } from "../types/TypeCart";
+import { useAuth } from "./AuthContext";
 
 const CartContext = createContext<TCartContext | undefined>(undefined);
 
 export const CartProvider = ({ children }: TChildren) => {
+  const { user } = useAuth();
   const queryClient = useQueryClient();
 
   const { data } = useQuery<TCart[]>({
@@ -25,7 +27,7 @@ export const CartProvider = ({ children }: TChildren) => {
 
       return await response.json();
     },
-    retry: false,
+    enabled: !!user,
   });
 
   const cart = data || [];

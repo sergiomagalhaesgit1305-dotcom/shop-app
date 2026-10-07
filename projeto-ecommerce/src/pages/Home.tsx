@@ -20,7 +20,7 @@ export const Home = () => {
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography variant="h4">Destaques</Typography>
-                <Button onClick={() => navigate("/products")}>Destaques</Button>
+                <Button onClick={() => navigate("/products")}>Ver Mais</Button>
               </Box>
               <Box
                 sx={{
@@ -61,7 +61,9 @@ export const Home = () => {
                         sx={{
                           width: "100%",
                           height: 200,
-                          borderRadius: 2,
+                          objectFit: "cover",
+                          borderRadius: 1,
+                          cursor: "pointer",
                         }}
                       />
                       <Typography>{product.name}</Typography>

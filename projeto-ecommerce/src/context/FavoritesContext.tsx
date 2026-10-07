@@ -8,10 +8,12 @@ import type {
   TFavorite,
   TFavoriteContext,
 } from "../types/TypeFavorite";
+import { useAuth } from "./AuthContext";
 
 const FavoriteContext = createContext<TFavoriteContext | undefined>(undefined);
 
 export const FavoriteProvider = ({ children }: TChildren) => {
+  const { user } = useAuth();
   const queryCLient = useQueryClient();
 
   const { data: favorites = [] } = useQuery<TFavorite[]>({
@@ -27,6 +29,7 @@ export const FavoriteProvider = ({ children }: TChildren) => {
 
       return await response.json();
     },
+    enabled: !!user,
   });
 
   const { mutate: addToFavorite } = useMutation({

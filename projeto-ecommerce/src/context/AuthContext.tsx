@@ -23,6 +23,10 @@ export const AuthProvider = ({ children }: TChildren) => {
         credentials: "include",
       });
 
+      if (response.status === 401) {
+        return null;
+      }
+
       if (!response.ok) {
         throw new Error("Failed to fetch");
       }
@@ -30,6 +34,7 @@ export const AuthProvider = ({ children }: TChildren) => {
       const data = await response.json();
       return data.user;
     },
+    retry: false,
   });
 
   const isAdmin = user?.role === "admin";

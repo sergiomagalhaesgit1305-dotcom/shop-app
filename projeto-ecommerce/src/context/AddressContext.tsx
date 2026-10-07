@@ -51,6 +51,7 @@ export const AddressProvider = ({ children }: TChildren) => {
 
       return await response.json();
     },
+    enabled: !!user,
   });
 
   const address = data || [];

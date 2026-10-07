@@ -3,23 +3,10 @@ import type { TChildren } from "../types/TypeChildren";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../API_URL";
+import { enqueueSnackbar } from "notistack";
+import type { TypeAuthContext, User } from "../types/TypeUser";
 
-export type User = {
-  id: string;
-  email: string;
-  username?: string;
-  role: "user" | "admin";
-};
-
-type AuthContextType = {
-  user: User | null;
-  isAdmin: boolean;
-  logout: () => void;
-  handleUsernameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-};
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<TypeAuthContext | undefined>(undefined);
 
 export const AuthProvider = ({ children }: TChildren) => {
   const [username, setUsername] = useState("");
@@ -64,7 +51,19 @@ export const AuthProvider = ({ children }: TChildren) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
+      enqueueSnackbar("Quantidade atualizada!", {
+        variant: "success",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+
       navigate("/me");
+    },
+
+    onError: () => {
+      enqueueSnackbar("Nao foi possivel atualizar o nome de utilizador!", {
+        variant: "error",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
     },
   });
 
@@ -90,7 +89,14 @@ export const AuthProvider = ({ children }: TChildren) => {
       queryClient.setQueryData(["user"], null);
       queryClient.invalidateQueries({ queryKey: ["user"] });
       queryClient.invalidateQueries({ queryKey: ["cart"] });
-      navigate("/");
+
+      navigate("/login");
+    },
+    onError: () => {
+      enqueueSnackbar("Nao foi possivel terminar sessao do utilizador!", {
+        variant: "error",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
     },
   });
 

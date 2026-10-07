@@ -1,24 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 import { API_URL } from "../API_URL";
-
-export type TProduct = {
-  id: string;
-  image: string;
-  name: string;
-  price_cents: number;
-  category: string;
-  description: string;
-  favorite: boolean;
-};
-
-type TProductContext = {
-  products: TProduct[];
-};
+import type { TChildren } from "../types/TypeChildren";
+import type { TProduct, TProductContext } from "../types/TypeProduct";
 
 const ProductContext = createContext<TProductContext | undefined>(undefined);
 
-export const ProductProvider = ({ children }: { children: ReactNode }) => {
+export const ProductProvider = ({ children }: TChildren) => {
   const { data: products = [] } = useQuery<TProduct[]>({
     queryKey: ["products"],
     queryFn: async () => {
@@ -32,9 +20,12 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
       return data;
     },
   });
-
   return (
-    <ProductContext.Provider value={{ products }}>
+    <ProductContext.Provider
+      value={{
+        products,
+      }}
+    >
       {children}
     </ProductContext.Provider>
   );
@@ -44,7 +35,7 @@ export const useProduct = () => {
   const context = useContext(ProductContext);
 
   if (!context) {
-    throw new Error("useAuth deve ser usado dentro de um AuthProvider");
+    throw new Error("useProduct deve ser usado dentro de um ProductProvider");
   }
 
   return context;

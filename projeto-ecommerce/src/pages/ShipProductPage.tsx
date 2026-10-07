@@ -29,7 +29,7 @@ import { useOrder } from "../context/OrderContext";
 export const ShipProductPage = () => {
   const { cart } = useCart();
   const { user } = useAuth();
-  const { FinalizePursache } = useOrder();
+  const { FinalizePurchase } = useOrder();
 
   const { address, DeleteAddress } = useAddress();
 
@@ -225,7 +225,7 @@ export const ShipProductPage = () => {
                 </Card>
                 <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                   <Button
-                    onClick={() => FinalizePursache(cart)}
+                    onClick={() => FinalizePurchase(cart)}
                     sx={{
                       height: "56px",
                       backgroundColor: "orange",

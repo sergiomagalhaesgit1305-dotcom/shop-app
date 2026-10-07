@@ -12,7 +12,6 @@ import {
   Typography,
 } from "@mui/material";
 import { API_URL } from "../API_URL";
-import { useAuth } from "../context/AuthContext";
 
 export const Register = () => {
   const [email, setEmail] = useState<string>("");
@@ -59,89 +58,89 @@ export const Register = () => {
   };
 
   return (
-    <>
-      <Box
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        bgcolor: "background.default",
+        color: "text.primary",
+        p: 2,
+      }}
+    >
+      <Card
         sx={{
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          bgcolor: "background.default",
-          color: "text.primary",
-          p: 2,
+          maxWidth: 440,
+          width: "100%",
+          borderRadius: 2,
+          boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
         }}
       >
-        <Card
-          sx={{
-            maxWidth: 440,
-            width: "100%",
-            borderRadius: 2,
-            boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
-          }}
-        >
-          <FormBox onSubmit={handleSubmit}>
-            <CardContent sx={{ p: 4 }}>
-              <Typography
-                variant="h5"
-                component="h1"
-                sx={{
-                  fontWeight: 800,
-                  textAlign: "center",
-                  mb: 3,
-                  color: "inherit",
-                }}
-              >
-                Cria a tua conta!
-              </Typography>
-              <TextField
-                sx={{ marginBottom: 2 }}
-                required
-                type="email"
-                value={email}
-                onChange={handleEmailChange}
-                label="Email"
-                variant="outlined"
-                fullWidth
-              />
-              <TextField
-                sx={{ marginBottom: 2 }}
-                required
-                type="text"
-                value={username}
-                onChange={handleUsernameChange}
-                label="Nome de utilizador"
-                variant="outlined"
-                fullWidth
-              />
-              <TextField
-                sx={{ marginBottom: 2 }}
-                required
-                type="password"
-                value={password}
-                onChange={handlePasswordChange}
-                label="Password"
-                variant="outlined"
-                fullWidth
-              />
-              <Button
-                type="submit"
-                fullWidth
-                sx={{
-                  height: "56px",
-                  backgroundColor: "orange",
-                  color: "white",
-                  "&:hover": { bgcolor: "#e67e00" },
-                  borderRadius: 1,
-                }}
-              >
-                Inciar sessao
-              </Button>
-            </CardContent>
-          </FormBox>
-        </Card>
-      </Box>
-      <Link to="/">Voltar</Link>
-    </>
+        <FormBox onSubmit={handleSubmit}>
+          <CardContent sx={{ p: 4 }}>
+            <Typography
+              variant="h5"
+              component="h1"
+              sx={{
+                fontWeight: 800,
+                textAlign: "center",
+                mb: 3,
+                color: "inherit",
+              }}
+            >
+              Cria a tua conta!
+            </Typography>
+            <TextField
+              sx={{ marginBottom: 2 }}
+              required
+              type="email"
+              value={email}
+              onChange={handleEmailChange}
+              label="Email"
+              variant="outlined"
+              fullWidth
+            />
+            <TextField
+              sx={{ marginBottom: 2 }}
+              required
+              type="text"
+              value={username}
+              onChange={handleUsernameChange}
+              label="Nome de utilizador"
+              variant="outlined"
+              fullWidth
+            />
+            <TextField
+              sx={{ marginBottom: 2 }}
+              required
+              type="password"
+              value={password}
+              onChange={handlePasswordChange}
+              label="Password"
+              variant="outlined"
+              fullWidth
+            />
+            <Button
+              type="submit"
+              fullWidth
+              sx={{
+                height: "56px",
+                backgroundColor: "orange",
+                color: "white",
+                "&:hover": { bgcolor: "#e67e00" },
+                borderRadius: 1,
+              }}
+            >
+              Criar Conta
+            </Button>
+          </CardContent>
+        </FormBox>
+      </Card>
+      <Button component={Link} to="/">
+        Voltar
+      </Button>
+    </Box>
   );
 };

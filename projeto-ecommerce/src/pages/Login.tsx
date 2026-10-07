@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import {
   Alert,
   Box,
@@ -11,7 +10,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { FormBox } from "../components/FormBox";
 import { API_URL } from "../API_URL";
 
 export const Login = () => {
@@ -58,43 +56,65 @@ export const Login = () => {
   };
 
   return (
-    <>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        bgcolor: "background.default",
+        color: "text.primary",
+        p: 2,
+        gap: 2,
+      }}
+    >
       <Box
         sx={{
-          minHeight: "100vh",
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          gap: 2,
+          alignItems: "stretch",
+          width: "100%",
+          maxWidth: 900,
           justifyContent: "center",
-          bgcolor: "background.default",
-          color: "text.primary",
-          p: 2,
         }}
       >
         <Card
           sx={{
+            flex: 1,
             maxWidth: 440,
-            width: "100%",
+            display: "flex",
+            flexDirection: "column",
             borderRadius: 2,
             boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
           }}
         >
-          <FormBox onSubmit={handleSubmit}>
-            <CardContent sx={{ p: 4 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              flex: 1,
+            }}
+          >
+            <CardContent
+              sx={{
+                p: 4,
+                display: "flex",
+                flexDirection: "column",
+                flex: 1,
+              }}
+            >
               <Typography
                 variant="h5"
                 component="h1"
-                sx={{
-                  fontWeight: 800,
-                  textAlign: "center",
-                  mb: 3,
-                  color: "inherit",
-                }}
+                sx={{ fontWeight: 800, textAlign: "center", mb: 3 }}
               >
                 Entra na tua conta!
               </Typography>
               <TextField
-                sx={{ marginBottom: 2 }}
+                sx={{ mb: 2 }}
                 required
                 type="email"
                 value={email}
@@ -104,7 +124,7 @@ export const Login = () => {
                 fullWidth
               />
               <TextField
-                sx={{ marginBottom: 2 }}
+                sx={{ mb: 2 }}
                 required
                 type="password"
                 value={password}
@@ -117,6 +137,7 @@ export const Login = () => {
                 type="submit"
                 fullWidth
                 sx={{
+                  mt: "auto",
                   height: "56px",
                   backgroundColor: "orange",
                   color: "white",
@@ -124,14 +145,75 @@ export const Login = () => {
                   borderRadius: 1,
                 }}
               >
-                Inciar sessao
+                Iniciar sessão
               </Button>
             </CardContent>
-          </FormBox>
+          </Box>
+        </Card>
+        <Card
+          sx={{
+            flex: 1,
+            maxWidth: 440,
+            display: "flex",
+            flexDirection: "column",
+            borderRadius: 2,
+            boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
+          }}
+        >
+          <CardContent
+            sx={{
+              p: 4,
+              display: "flex",
+              flexDirection: "column",
+              flex: 1,
+            }}
+          >
+            <Typography
+              variant="h5"
+              component="h1"
+              sx={{ fontWeight: 800, textAlign: "center", mb: 3 }}
+            >
+              Ainda não tens conta? Regista-te agora!
+            </Typography>
+            <Typography>Fácil e Rápido!</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 1,
+                mt: 1,
+                mb: 3,
+              }}
+            >
+              <Typography variant="body2">
+                • Acompanha os teus pedidos
+              </Typography>
+              <Typography variant="body2">
+                • Guarda os teus detalhes de pagamento e de envio e poupa tempo
+              </Typography>
+              <Typography variant="body2">• Faz devoluções online</Typography>
+            </Box>
+            <Button
+              component={Link}
+              to="/register"
+              fullWidth
+              sx={{
+                mt: "auto",
+                height: "56px",
+                backgroundColor: "orange",
+                color: "white",
+                "&:hover": { bgcolor: "#e67e00" },
+                borderRadius: 1,
+              }}
+            >
+              Criar Conta
+            </Button>
+          </CardContent>
         </Card>
       </Box>
-
-      <Link to="/">Voltar</Link>
-    </>
+      <Button component={Link} to="/">
+        Voltar
+      </Button>
+    </Box>
   );
 };

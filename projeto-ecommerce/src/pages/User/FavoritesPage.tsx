@@ -8,7 +8,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 export const FavoritesPage = () => {
   const { user } = useAuth();
   const { favorites, removeFromFavorite } = useFavorite();
-  const { handleCart } = useCart();
+  const { handleAddToCart } = useCart();
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
@@ -82,13 +82,13 @@ export const FavoritesPage = () => {
                       borderRadius: 1,
                     }}
                     onClick={() => {
-                      handleCart(
-                        item.product_image,
-                        item.product_name,
-                        item.product_priceCents,
-                        item.product_id,
-                        1,
-                      );
+                      handleAddToCart({
+                        product_id: item.product_id,
+                        product_name: item.product_name,
+                        product_image: item.product_image,
+                        product_priceCents: item.product_priceCents,
+                        quantity: 1,
+                      });
                     }}
                   >
                     Comprar

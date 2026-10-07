@@ -19,7 +19,7 @@ import { useAppTheme } from "./ControlColors";
 import BedtimeOutlinedIcon from "@mui/icons-material/BedtimeOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 import { CartDrawer } from "../pages/Drawers/CartDrawer";
-import { useSearch } from "../context/SearchContext";
+import { useFilter } from "../context/FilterContext";
 import { FavoriteDrawer } from "../pages/Drawers/FavoriteDrawer";
 import { ProfileDrawer } from "../pages/Drawers/ProfileDrawer";
 import { LeftDrawer } from "../pages/Drawers/LeftDrawer";
@@ -69,7 +69,7 @@ export default function PrimarySearchAppBar() {
   const [isFavoriteDrawerOpen, setIsFavoriteDrawerOpen] = useState(false);
   const [isProfileDrawerOpen, setIsProfileDrawerOpen] = useState(false);
   const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(false);
-  const { search, handleChange, handleKeyDown } = useSearch();
+  const { search, handleChange, handleKeyDown } = useFilter();
 
   const { user } = useAuth();
   const { mode, setMode } = useAppTheme();

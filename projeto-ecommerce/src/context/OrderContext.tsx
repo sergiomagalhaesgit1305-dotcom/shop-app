@@ -4,36 +4,14 @@ import { createContext } from "react";
 import { useContext } from "react";
 import type { TChildren } from "../types/TypeChildren";
 import { useNavigate } from "react-router-dom";
+import { enqueueSnackbar } from "notistack";
+import type {
+  TCreateOrderItem,
+  TOrder,
+  TOrderContext,
+} from "../types/TypeOrder";
 
-export type TOrderItem = {
-  id: string;
-  product_id: string;
-  product_name: string;
-  product_priceCents: number;
-  product_image: string;
-  quantity: number;
-};
-
-export type TOrder = {
-  id: string;
-  total_cents: number;
-  created_at: string;
-  order_items: TOrderItem[];
-};
-
-export type TCreateOrderItem = {
-  product_id: string;
-  product_name: string;
-  product_priceCents: number;
-  product_image: string;
-  quantity: number;
-};
-type TContextOrder = {
-  order: TOrder[] | null;
-  FinalizePursache: (order: TCreateOrderItem[]) => void;
-};
-
-const OrderContext = createContext<TContextOrder | undefined>(undefined);
+const OrderContext = createContext<TOrderContext | undefined>(undefined);
 
 export const OrderProvider = ({ children }: TChildren) => {
   const queryClient = useQueryClient();
@@ -56,7 +34,7 @@ export const OrderProvider = ({ children }: TChildren) => {
     },
   });
 
-  const { mutate: FinalizePursache } = useMutation({
+  const { mutate: FinalizePurchase } = useMutation({
     mutationFn: async (order: TCreateOrderItem[]) => {
       const response = await fetch(`${API_URL}/order`, {
         method: "POST",
@@ -76,12 +54,23 @@ export const OrderProvider = ({ children }: TChildren) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["order"] });
       queryClient.invalidateQueries({ queryKey: ["cart"] });
+
+      enqueueSnackbar("Compra finalizada com sucesso!", {
+        variant: "success",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
       navigate("/");
+    },
+    onError: () => {
+      enqueueSnackbar("Nao foi possivel finalizar a compra", {
+        variant: "error",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
     },
   });
 
   return (
-    <OrderContext.Provider value={{ order, FinalizePursache }}>
+    <OrderContext.Provider value={{ order, FinalizePurchase }}>
       {children}
     </OrderContext.Provider>
   );

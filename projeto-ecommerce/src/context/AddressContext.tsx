@@ -3,28 +3,8 @@ import type { TChildren } from "../types/TypeChildren";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "../API_URL";
 import { useAuth } from "./AuthContext";
-
-type TAddress = {
-  id: string;
-  street: string;
-  postal_code: string;
-  city: string;
-  phone: string;
-};
-
-type TAddressContext = {
-  address: TAddress[];
-  street: string;
-  postal_code: string;
-  city: string;
-  phone: string;
-  handleStreetChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handlePostalCodeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleCityChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handlePhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  DeleteAddress: (id: string) => void;
-};
+import { enqueueSnackbar } from "notistack";
+import type { TAddress, TAddressContext } from "../types/TypeAddress";
 
 const addressContext = createContext<TAddressContext | undefined>(undefined);
 
@@ -92,11 +72,21 @@ export const AddressProvider = ({ children }: TChildren) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["address"] });
-
+      enqueueSnackbar("Morada adicionada com sucesso", {
+        variant: "success",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
       setStreet("");
       setPostalCode("");
       setCity("");
       setPhone("");
+    },
+
+    onError: () => {
+      enqueueSnackbar("Nao foi possivel adicionar a morada", {
+        variant: "error",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
     },
   });
 

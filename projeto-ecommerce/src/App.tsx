@@ -9,7 +9,7 @@ import { CartProvider } from "./context/CartContext";
 import { CartPage } from "./pages/CartPage";
 import { UserPage } from "./pages/User/UserPage";
 import { CustomThemeProvider } from "./components/ControlColors";
-import { SearchProvider } from "./context/SearchContext";
+import { FilterProvider } from "./context/FilterContext";
 import { MainLayout } from "./pages/MainLayout";
 import { ShipProductPage } from "./pages/ShipProductPage";
 import { AddressProvider } from "./context/AddressContext";
@@ -18,6 +18,7 @@ import { PersonalDetails } from "./pages/User/PersonalDetails";
 import { FavoritesPage } from "./pages/User/FavoritesPage";
 import { OrderProvider } from "./context/OrderContext";
 import { OrderHistoryPage } from "./pages/User/OrdersHistoryPage";
+import { ProductDetails } from "./pages/ProductDetails";
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
             <OrderProvider>
               <FavoriteProvider>
                 <ProductProvider>
-                  <SearchProvider>
+                  <FilterProvider>
                     <CartProvider>
                       <Routes>
                         <Route element={<MainLayout />}>
@@ -46,13 +47,17 @@ function App() {
                               element={<OrderHistoryPage />}
                             />
                           </Route>
+                          <Route
+                            path="/product/:id"
+                            element={<ProductDetails />}
+                          />
                         </Route>
                         <Route path="/register" element={<Register />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/ship" element={<ShipProductPage />} />
                       </Routes>
                     </CartProvider>
-                  </SearchProvider>
+                  </FilterProvider>
                 </ProductProvider>
               </FavoriteProvider>
             </OrderProvider>

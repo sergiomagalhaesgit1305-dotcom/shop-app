@@ -3,33 +3,9 @@ import type { TChildren } from "../types/TypeChildren";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "../API_URL";
 import { enqueueSnackbar } from "notistack";
+import type { TCart, TCartContext, TCartOrder } from "../types/TypeCart";
 
-type TCart = {
-  user_id: string;
-  product_id: string;
-  product_image: string;
-  product_name: string;
-  product_priceCents: number;
-  quantity: number;
-};
-
-type TCartOrder = {
-  product_image: string;
-  product_name: string;
-  product_priceCents: number;
-  product_id: string;
-  quantity: number;
-};
-
-type TCartContext = {
-  cart: TCart[];
-  handleAddToCart: (product: TCartOrder) => void;
-  handleRemoveItem: (product_id: string) => void;
-  handleDecreaseItem: (product_id: string) => void;
-  handleAddItem: (product_id: string) => void;
-};
-
-const cartContext = createContext<TCartContext | undefined>(undefined);
+const CartContext = createContext<TCartContext | undefined>(undefined);
 
 export const CartProvider = ({ children }: TChildren) => {
   const queryClient = useQueryClient();
@@ -79,65 +55,104 @@ export const CartProvider = ({ children }: TChildren) => {
         anchorOrigin: { vertical: "bottom", horizontal: "right" },
       });
     },
+    onError: () => {
+      enqueueSnackbar("Nao foi possivel adicionar o produto ao carrinho!", {
+        variant: "error",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+    },
   });
 
-  const handleAddItem = async (product_id: string) => {
-    try {
+  const { mutate: handleAddItem } = useMutation({
+    mutationFn: async (product_id: string) => {
       const response = await fetch(`${API_URL}/cart/addItem/${product_id}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
       });
 
       if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
+        throw new Error("Failed to finalize purchase");
       }
 
+      return await response.json();
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
-    } catch (error: any) {
-      console.log(`${error.message}`);
-    }
-  };
 
-  const handleDecreaseItem = async (product_id: string) => {
-    try {
+      enqueueSnackbar("Produto adicionado ao carrinho com sucesso!", {
+        variant: "success",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+    },
+    onError: () => {
+      enqueueSnackbar("Nao foi possivel adicionar o produto ao carrinho!", {
+        variant: "error",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+    },
+  });
+
+  const { mutate: handleDecreaseItem } = useMutation({
+    mutationFn: async (product_id: string) => {
       const response = await fetch(`${API_URL}/cart/removeItem/${product_id}`, {
         method: "PATCH",
-
         credentials: "include",
       });
 
       if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
+        throw new Error("Failed to finalize pursache");
       }
 
+      return await response.json();
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
-    } catch (error: any) {
-      console.log(`${error.message}`);
-    }
-  };
 
-  const handleRemoveItem = async (product_id: string) => {
-    try {
+      enqueueSnackbar("Quantidade atualizada!", {
+        variant: "success",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+    },
+    onError: () => {
+      enqueueSnackbar("Nao foi possivel atualizar a quantidade do carrinho!", {
+        variant: "error",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+    },
+  });
+
+  const { mutate: handleRemoveItem } = useMutation({
+    mutationFn: async (product_id: string) => {
       const response = await fetch(`${API_URL}/cart/${product_id}`, {
         method: "DELETE",
         credentials: "include",
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete item from cart");
+        throw new Error("Failed to finalize pursache");
       }
 
+      return await response.json();
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
-    } catch (error: any) {
-      console.log(`${error.message}`);
-    }
-  };
+
+      enqueueSnackbar("Produto removido do carrinho com sucesso!", {
+        variant: "info",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+    },
+    onError: () => {
+      enqueueSnackbar("Nao foi possivel remover o producto do carrinho!", {
+        variant: "error",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+    },
+  });
 
   return (
-    <cartContext.Provider
+    <CartContext.Provider
       value={{
         cart,
         handleAddToCart,
@@ -147,12 +162,12 @@ export const CartProvider = ({ children }: TChildren) => {
       }}
     >
       {children}
-    </cartContext.Provider>
+    </CartContext.Provider>
   );
 };
 
 export const useCart = () => {
-  const context = useContext(cartContext);
+  const context = useContext(CartContext);
 
   if (!context) {
     throw new Error("useCart deve ser usado dentro de um CartProvider");

@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 
 export const MainLayout = () => {
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box>
       <PrimarySearchAppBar />
       <Outlet />
     </Box>

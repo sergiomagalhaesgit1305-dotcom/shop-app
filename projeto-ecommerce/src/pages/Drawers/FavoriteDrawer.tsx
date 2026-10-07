@@ -16,7 +16,7 @@ import type { TDrawer } from "../../types/TypeDrawer";
 
 export const FavoriteDrawer = ({ open, onClose }: TDrawer) => {
   const { favorites, addToFavorite, removeFromFavorite } = useFavorite();
-  const { handleCart } = useCart();
+  const { handleAddToCart } = useCart();
 
   return (
     <Drawer
@@ -108,7 +108,6 @@ export const FavoriteDrawer = ({ open, onClose }: TDrawer) => {
                       sx={{
                         fontWeight: "bold",
                         lineHeight: 1.2,
-                        mb: 2,
                       }}
                     >
                       {item.product_name}
@@ -117,19 +116,19 @@ export const FavoriteDrawer = ({ open, onClose }: TDrawer) => {
                     <Typography sx={{ mt: 1, fontWeight: "bold" }}>
                       {FormatedPrice(item.product_priceCents)}
                     </Typography>
-                    <button
+                    <Button
                       onClick={() => {
-                        handleCart(
-                          item.product_image,
-                          item.product_name,
-                          item.product_priceCents,
-                          item.product_id,
-                          1,
-                        );
+                        handleAddToCart({
+                          product_id: item.product_id,
+                          product_name: item.product_name,
+                          product_image: item.product_image,
+                          product_priceCents: item.product_priceCents,
+                          quantity: 1,
+                        });
                       }}
                     >
                       Comprar
-                    </button>
+                    </Button>
                   </Box>
                   <IconButton
                     onClick={() => removeFromFavorite(item.product_id)}

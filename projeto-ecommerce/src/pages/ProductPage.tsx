@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { FormatedPrice } from "../utils/FormatPrice";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import { useSearch } from "../context/SearchContext";
+import { useFilter } from "../context/FilterContext";
 import {
   Box,
   Button,
@@ -19,8 +19,8 @@ export const ProductPage = () => {
   const navigate = useNavigate();
   const { handleAddToCart } = useCart();
   const { user } = useAuth();
-  const { filteredProducts } = useSearch();
-  const { favorites, addToFavorite } = useFavorite();
+  const { filteredProducts } = useFilter();
+  const { favorites, addToFavorite, removeFromFavorite } = useFavorite();
 
   return (
     <Box
@@ -29,9 +29,9 @@ export const ProductPage = () => {
       <Box
         sx={{
           p: 2,
-          gap: 3,
+          gap: 1,
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(200px, 2fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(220px, 2fr))",
         }}
       >
         {filteredProducts.map((product) => {
@@ -40,50 +40,41 @@ export const ProductPage = () => {
           );
 
           return (
-            <Card
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-                minWidth: "200px",
-                borderRadius: 3,
-              }}
-              key={product.id}
-            >
-              <Box
-                sx={{
-                  width: "100%",
-                  height: 200,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  p: 2,
-                  backgroundColor: "#fff",
-                  borderBottom: "1px solid #f0f0f0",
-                }}
-              >
-                <Box
-                  component="img"
-                  src={product.image}
-                  alt={product.name}
-                  sx={{
-                    maxHeight: "100%",
-                    maxWidth: "100%",
-                    objectFit: "contain",
-                  }}
-                />
-              </Box>
+            <Card key={product.id}>
               <CardContent
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "flex-start",
-                  textAlign: "left",
+                  alignItems: "center",
+                  textAlign: "center",
                   flexGrow: 1,
                   p: 2,
                   gap: 1,
                 }}
               >
+                <Box
+                  onClick={() => navigate(`/product/${product.id}`)}
+                  sx={{
+                    width: "100%",
+                    height: 250,
+                    bgcolor: "#ffffff",
+                    borderRadius: 2,
+                    p: 1,
+                    cursor: "pointer",
+                  }}
+                >
+                  <Box
+                    component="img"
+                    src={product.image}
+                    alt={product.name}
+                    sx={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: 1,
+                    }}
+                  />
+                </Box>
                 <Typography
                   color="text.secondary"
                   sx={{
@@ -103,7 +94,6 @@ export const ProductPage = () => {
               <CardActions
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
                   justifyContent: "space-between",
                   alignItems: "center",
                   px: 2,
@@ -113,14 +103,18 @@ export const ProductPage = () => {
                 }}
               >
                 <Button
-                  onClick={() =>
-                    addToFavorite({
-                      product_id: product.id,
-                      product_image: product.image,
-                      product_name: product.name,
-                      product_priceCents: product.price_cents,
-                    })
-                  }
+                  onClick={() => {
+                    if (isFavorite) {
+                      removeFromFavorite(product.id);
+                    } else {
+                      addToFavorite({
+                        product_id: product.id,
+                        product_image: product.image,
+                        product_name: product.name,
+                        product_priceCents: product.price_cents,
+                      });
+                    }
+                  }}
                 >
                   {isFavorite ? (
                     <FavoriteIcon sx={{ color: "red" }} />

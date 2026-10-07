@@ -1,29 +1,13 @@
 import { createContext, useContext, useState } from "react";
-import { useProduct } from "./ProductsContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "../API_URL";
 import type { TChildren } from "../types/TypeChildren";
-
-type TFavorite = {
-  user_id: string;
-  product_id: string;
-  product_image: string;
-  product_name: string;
-  product_priceCents: number;
-};
-
-type AddFavorite = {
-  product_id: string;
-  product_image: string;
-  product_name: string;
-  product_priceCents: number;
-};
-
-type TFavoriteContext = {
-  favorites: TFavorite[];
-  addToFavorite: (product: AddFavorite) => void;
-  removeFromFavorite: (product_id: string) => void;
-};
+import { enqueueSnackbar } from "notistack";
+import type {
+  AddFavorite,
+  TFavorite,
+  TFavoriteContext,
+} from "../types/TypeFavorite";
 
 const FavoriteContext = createContext<TFavoriteContext | undefined>(undefined);
 
@@ -64,6 +48,17 @@ export const FavoriteProvider = ({ children }: TChildren) => {
     },
     onSuccess: () => {
       queryCLient.invalidateQueries({ queryKey: ["favorites"] });
+
+      enqueueSnackbar("Produto adicionado aos Favoritos com sucesso!", {
+        variant: "success",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+    },
+    onError: () => {
+      enqueueSnackbar("Nao foi possivel adicionar o produto aos favoritos", {
+        variant: "error",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
     },
   });
 
@@ -83,6 +78,17 @@ export const FavoriteProvider = ({ children }: TChildren) => {
     },
     onSuccess: () => {
       queryCLient.invalidateQueries({ queryKey: ["favorites"] });
+
+      enqueueSnackbar("Produto removido dos Favoritos com sucesso!", {
+        variant: "info",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+    },
+    onError: () => {
+      enqueueSnackbar("Nao foi possivel remover o produto dos favoritos", {
+        variant: "error",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
     },
   });
 

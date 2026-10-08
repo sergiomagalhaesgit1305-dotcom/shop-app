@@ -46,46 +46,64 @@ const category = [
   {
     id: 7,
     selectedSubcategory: "Sports Gear & Accessories",
-    name: "Desporto & Acessórios",
+    name: "Desporto",
     image: Desporto,
   },
   { id: 8, selectedSubcategory: "Footwear", name: "Calçado", image: Calcado },
 ];
 
 export const Category = () => {
-  const { selectSubcategory, selectedSubcategory } = useFilter();
+  const { selectSubcategory } = useFilter();
 
   return (
     <Box>
       <Card>
         <CardContent
-          sx={{ display: "flex", gap: 2, justifyContent: "space-between" }}
+          sx={{
+            display: "flex",
+            gap: 10,
+            px: 5,
+            overflowX: "auto",
+            scrollPaddingLeft: "24px",
+            scrollSnapType: "x mandatory",
+            WebkitOverflowScrolling: "touch",
+            "&::-webkit-scrollbar": { display: "none" },
+            scrollbarWidth: "none",
+          }}
         >
-          {category.map((item) => {
-            const isSelected = selectedSubcategory === item.selectedSubcategory;
-
-            return (
-              <Button
-                key={item.id}
-                onClick={() => selectSubcategory(item.selectedSubcategory)}
+          {category.map((item) => (
+            <Button
+              key={item.id}
+              onClick={() => selectSubcategory(item.selectedSubcategory)}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                textTransform: "none",
+                scrollSnapAlign: "center",
+              }}
+            >
+              <Avatar
+                src={item.image}
+                alt={item.name}
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  textTransform: "none",
+                  width: { xs: 90, md: 100 },
+                  height: { xs: 90, md: 100 },
+                  mb: 1,
+                  border: "2px solid gray",
+                  transition:
+                    "transform 0.3s ease-in-out, border-color 0.3s ease-in-out",
+                  "&:hover": {
+                    border: "2px solid #e67e00",
+                    transform: "scale(1.08)",
+                  },
                 }}
-              >
-                <Avatar
-                  src={item.image}
-                  alt={item.name}
-                  sx={{ width: 100, height: 100, mb: 1 }}
-                />
-                <Typography variant="body2" color="text.primary">
-                  {item.name}
-                </Typography>
-              </Button>
-            );
-          })}
+              />
+              <Typography variant="body2" sx={{ color: "text.primary" }}>
+                {item.name}
+              </Typography>
+            </Button>
+          ))}
         </CardContent>
       </Card>
     </Box>

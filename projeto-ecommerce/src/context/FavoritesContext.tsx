@@ -9,12 +9,14 @@ import type {
   TFavoriteContext,
 } from "../types/TypeFavorite";
 import { useAuth } from "./AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const FavoriteContext = createContext<TFavoriteContext | undefined>(undefined);
 
 export const FavoriteProvider = ({ children }: TChildren) => {
   const { user } = useAuth();
   const queryCLient = useQueryClient();
+  const navigate = useNavigate();
 
   const { data: favorites = [] } = useQuery<TFavorite[]>({
     queryKey: ["favorites"],
@@ -32,7 +34,7 @@ export const FavoriteProvider = ({ children }: TChildren) => {
     enabled: !!user,
   });
 
-  const { mutate: addToFavorite } = useMutation({
+  const { mutate: addToFavoriteMutation } = useMutation({
     mutationFn: async ({ product_id }: AddFavorite) => {
       const response = await fetch(`${API_URL}/favorites`, {
         method: "POST",
@@ -44,7 +46,7 @@ export const FavoriteProvider = ({ children }: TChildren) => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to update username");
+        throw new Error("Failed to add Product to Favorites");
       }
 
       return await response.json();
@@ -65,6 +67,20 @@ export const FavoriteProvider = ({ children }: TChildren) => {
     },
   });
 
+  const addToFavorite = (data: AddFavorite) => {
+    if (!user) {
+      enqueueSnackbar(
+        "Para adicionar produtos aos favoritos tem que ter a sessão iniciada.",
+        {
+          variant: "info",
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        },
+      );
+      return navigate("/login");
+    }
+    addToFavoriteMutation(data);
+  };
+
   const { mutate: removeFromFavorite } = useMutation({
     mutationFn: async (product_id: string) => {
       const response = await fetch(`${API_URL}/favorites/${product_id}`, {
@@ -74,7 +90,7 @@ export const FavoriteProvider = ({ children }: TChildren) => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to update username");
+        throw new Error("Failed to remove Product from Favorites");
       }
 
       return await response.json();

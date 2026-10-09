@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { API_URL } from "../API_URL";
+import { enqueueSnackbar } from "notistack";
 
 export const Register = () => {
   const [email, setEmail] = useState<string>("");
@@ -49,6 +50,16 @@ export const Register = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
       navigate("/");
+      enqueueSnackbar("Registo efetuado com sucesso!", {
+        variant: "success",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+    },
+    onError: () => {
+      enqueueSnackbar("Nao foi possivel criar conta", {
+        variant: "error",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
     },
   });
 

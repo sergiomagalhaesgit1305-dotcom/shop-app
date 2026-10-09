@@ -32,7 +32,7 @@ export const CartProvider = ({ children }: TChildren) => {
 
   const cart = data || [];
 
-  const { mutate: handleAddToCart } = useMutation({
+  const { mutate: handleAddToCartMutation } = useMutation({
     mutationFn: async (product: TCartOrder) => {
       const response = await fetch(`${API_URL}/cart`, {
         method: "POST",
@@ -64,6 +64,20 @@ export const CartProvider = ({ children }: TChildren) => {
       });
     },
   });
+
+  const handleAddToCart = (product: TCartOrder) => {
+    if (!user) {
+      enqueueSnackbar(
+        "Para adicionar o produto ao carrinho tem que ter a sessão iniciada.",
+        {
+          variant: "info",
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        },
+      );
+      return;
+    }
+    handleAddToCartMutation(product);
+  };
 
   const { mutate: handleAddItem } = useMutation({
     mutationFn: async (product_id: string) => {

@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { API_URL } from "../API_URL";
+import { enqueueSnackbar } from "notistack";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -46,12 +47,21 @@ export const Login = () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
       queryClient.invalidateQueries({ queryKey: ["cart"] });
       navigate("/");
+      enqueueSnackbar("Sessão iniciada com sucesso.", {
+        variant: "success",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+    },
+    onError: () => {
+      enqueueSnackbar("Nao foi possivel iniciar sessão", {
+        variant: "error",
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
     },
   });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    <Alert severity="success">This is a success Alert.</Alert>;
     mutate();
   };
 

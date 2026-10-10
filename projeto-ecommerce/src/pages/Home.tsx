@@ -6,6 +6,7 @@ import { Category } from "../components/Category";
 import { useProduct } from "../context/ProductsContext";
 import Laptop from "../assets/LaptopImageForHome.jpg";
 import { FormatedPrice } from "../utils/FormatPrice";
+import { ProductCardComponent } from "../components/ProductCardComponent";
 
 export const Home = () => {
   const { products } = useProduct();
@@ -15,7 +16,7 @@ export const Home = () => {
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <Carrosel />
         <Category />
-        <Card>
+        <Card sx={{ bgcolor: "background.paper" }}>
           <CardContent sx={{ m: 2 }}>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -43,40 +44,7 @@ export const Home = () => {
                   }}
                 />
                 {products.slice(0, 4).map((product) => (
-                  <Card key={product.id}>
-                    <CardContent
-                      sx={{
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 2,
-                        bgcolor: "background.default",
-                      }}
-                    >
-                      <Box
-                        onClick={() => navigate(`/product/${product.id}`)}
-                        component="img"
-                        src={`${product.image}?w=164&h=164&fit=crop&auto=format`}
-                        alt={product.image}
-                        sx={{
-                          width: "100%",
-                          height: 200,
-                          objectFit: "cover",
-                          borderRadius: 1,
-                          cursor: "pointer",
-                        }}
-                      />
-                      <Typography>{product.name}</Typography>
-                      <Typography variant="body2">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua.
-                      </Typography>
-                      <Typography>
-                        {FormatedPrice(product.price_cents)}
-                      </Typography>
-                    </CardContent>
-                  </Card>
+                  <ProductCardComponent key={product.id} product={product} />
                 ))}
               </Box>
             </Box>

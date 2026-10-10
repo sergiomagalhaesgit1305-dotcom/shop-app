@@ -26,7 +26,14 @@ const theme = createTheme({
         },
       },
     },
-    dark: true,
+    dark: {
+      palette: {
+        background: {
+          default: "#161616",
+          paper: "#131313",
+        },
+      },
+    },
   },
 });
 

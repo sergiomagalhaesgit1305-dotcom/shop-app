@@ -155,14 +155,10 @@ app.patch("/me/update-password", async (req, res) => {
 });
 
 app.get("/me", async (req, res) => {
-  if (!req.user) {
-    return res.status(200).json({ user: null });
-  }
-
   const token = req.cookies.access_token;
 
   if (!token) {
-    return res.status(401).json({ message: "Sessão não encontrada" });
+    return res.json({ user: null });
   }
 
   const {
@@ -172,7 +168,7 @@ app.get("/me", async (req, res) => {
 
   if (authError || !user) {
     res.clearCookie("access_token");
-    return res.status(401).json({ message: "Sessão expirada" });
+    return res.status(200).json({ user: null });
   }
 
   const { data: profileData, error: profileError } = await supabase

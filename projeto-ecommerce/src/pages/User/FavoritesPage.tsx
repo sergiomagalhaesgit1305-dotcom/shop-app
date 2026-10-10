@@ -10,7 +10,13 @@ export const FavoritesPage = () => {
   const { favorites, removeFromFavorite } = useFavorite();
   const { handleAddToCart } = useCart();
   return (
-    <>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 1,
+      }}
+    >
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
         <Typography variant="body2" color="text.secondary">
           {user?.username}
@@ -28,7 +34,6 @@ export const FavoritesPage = () => {
           </Typography>
         )}
       </Box>
-
       <Box
         sx={{
           display: { xs: "none", sm: "grid" },
@@ -99,6 +104,6 @@ export const FavoritesPage = () => {
           </Box>
         ))}
       </Box>
-    </>
+    </Box>
   );
 };

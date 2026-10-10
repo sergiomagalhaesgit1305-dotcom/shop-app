@@ -1,19 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import { FormatedPrice } from "../utils/FormatPrice";
-import { useCart } from "../context/CartContext";
-import { useAuth } from "../context/AuthContext";
 import { useFilter } from "../context/FilterContext";
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Typography,
-} from "@mui/material";
-import { useFavorite } from "../context/FavoritesContext";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { Box } from "@mui/material";
 import { ProductCardComponent } from "../components/ProductCardComponent";
 
 export const ProductPage = () => {

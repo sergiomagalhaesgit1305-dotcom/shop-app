@@ -66,20 +66,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function PrimarySearchAppBar() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
   const [isFavoriteDrawerOpen, setIsFavoriteDrawerOpen] = useState(false);
   const [isProfileDrawerOpen, setIsProfileDrawerOpen] = useState(false);
   const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(false);
   const { search, handleChange, handleKeyDown } = useFilter();
+  const { mode, setMode } = useAppTheme();
 
   useEffect(() => {
     if (search.length === 0) {
       navigate("/");
     }
   }, [search]);
-
-  const { user } = useAuth();
-  const { mode, setMode } = useAppTheme();
 
   const renderMenu = (
     <ProfileDrawer

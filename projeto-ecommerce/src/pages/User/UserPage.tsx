@@ -1,15 +1,6 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  IconButton,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { useState } from "react";
-import { PersonalDetails } from "./PersonalDetails";
-import { FavoritesPage } from "./FavoritesPage";
 import { Link, Outlet } from "react-router-dom";
 
 type TValueButton = "Encomendas" | "Dados" | "Favoritos" | "Avaliacao";

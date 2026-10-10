@@ -22,7 +22,13 @@ export const OrderHistoryPage = () => {
     return new Date(dateString).toLocaleDateString("pt-PT");
   };
   return (
-    <Box>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+      }}
+    >
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
         <Typography variant="body2" color="text.secondary">
           {user?.username}

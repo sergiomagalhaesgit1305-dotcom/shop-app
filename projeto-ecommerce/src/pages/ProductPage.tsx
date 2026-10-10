@@ -6,13 +6,18 @@ export const ProductPage = () => {
   const { filteredProducts } = useFilter();
 
   return (
-    <Box sx={{ width: "100%", mx: "auto", maxWidth: 1560 }}>
+    <Box
+      sx={{ width: "100%", mx: "auto", maxWidth: 1560, px: { xs: 2, md: 2 } }}
+    >
       <Box
         sx={{
           mt: 2,
           gap: 1,
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(220px, 2fr))",
+          gridTemplateColumns: {
+            xs: "repeat(auto-fill, minmax(150px, 1fr))",
+            md: "repeat(auto-fill, minmax(220px, 2fr))",
+          },
         }}
       >
         {filteredProducts.map((product) => (

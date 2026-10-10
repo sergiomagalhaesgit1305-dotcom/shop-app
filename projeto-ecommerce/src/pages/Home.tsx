@@ -25,11 +25,13 @@ export const Home = () => {
               </Box>
               <Box
                 sx={{
-                  height: 500,
-                  display: "grid",
-                  gridTemplateColumns: "repeat(5, 1fr)",
+                  display: "flex",
                   gap: 2,
-                  alignItems: "stretch",
+                  overflowX: "auto",
+                  scrollSnapType: "x mandatory",
+                  WebkitOverflowScrolling: "touch",
+                  "&::-webkit-scrollbar": { display: "none" },
+                  scrollbarWidth: "none",
                 }}
               >
                 <Box
@@ -37,14 +39,32 @@ export const Home = () => {
                   src={Laptop}
                   alt={Laptop}
                   sx={{
-                    width: "100%",
-                    height: "100%",
+                    minWidth: { xs: 150, sm: 220 },
+                    height: 450,
                     objectFit: "cover",
-                    borderRadius: 1,
+                    scrollSnapAlign: "start",
                   }}
                 />
-                {products.slice(0, 4).map((product) => (
-                  <ProductCardComponent key={product.id} product={product} />
+                {products.slice(0, 8).map((product) => (
+                  <Box
+                    key={product.id}
+                    sx={{
+                      minWidth: { xs: 150, sm: 220 },
+                      maxWidth: { xs: 150, sm: 220 },
+                      height: 450,
+                      scrollSnapAlign: "start",
+                      display: "flex",
+                      flexDirection: "column",
+                      "& > div": {
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                      },
+                    }}
+                  >
+                    <ProductCardComponent key={product.id} product={product} />
+                  </Box>
                 ))}
               </Box>
             </Box>

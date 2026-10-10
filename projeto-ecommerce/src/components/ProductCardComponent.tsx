@@ -30,17 +30,18 @@ export const ProductCardComponent = ({ product }: { product: TProduct }) => {
           alignItems: "left",
           textAlign: "left",
           flexGrow: 1,
-          p: 2,
+          py: 1,
+          px: 1,
           gap: 1,
         }}
       >
         <Box
-          onClick={() => navigate(`/product/${product.id}`)}
+          onClick={() => navigate(`/products/${product.id}`)}
           sx={{
             width: "100%",
-            height: 200,
+            height: 150,
             bgcolor: "#ffffff",
-            borderRadius: 2,
+            borderRadius: 1,
             p: 1,
             cursor: "pointer",
           }}
@@ -58,20 +59,29 @@ export const ProductCardComponent = ({ product }: { product: TProduct }) => {
           />
         </Box>
         <Typography
-          color="text.secondary"
           sx={{
-            fontWeight: 600,
+            fontWeight: { xs: 300, md: 600 },
             color: "text.primary",
             display: "-webkit-box",
             WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
-            minHeight: "2.6em",
+            minHeight: "3em",
+            maxHeight: "3em",
           }}
         >
           {product.name}
         </Typography>
-        <Typography variant="body2">
+        <Typography
+          variant="body2"
+          sx={{
+            display: { xs: "-webkit-box", md: "block" },
+            WebkitLineClamp: { xs: 2, md: "unset" },
+            WebkitBoxOrient: { xs: "vertical", md: "initial" },
+            overflow: { xs: "hidden", md: "visible" },
+            textOverflow: { xs: "ellipsis", md: "clip" },
+          }}
+        >
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </Typography>
@@ -82,8 +92,8 @@ export const ProductCardComponent = ({ product }: { product: TProduct }) => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          px: 2,
-          pb: 2,
+          px: 1,
+          pb: 1,
           pt: 0,
           width: "100%",
         }}

@@ -64,7 +64,6 @@ export const Category = () => {
             gap: 10,
             px: 5,
             overflowX: "auto",
-            scrollPaddingLeft: "24px",
             scrollSnapType: "x mandatory",
             WebkitOverflowScrolling: "touch",
             "&::-webkit-scrollbar": { display: "none" },

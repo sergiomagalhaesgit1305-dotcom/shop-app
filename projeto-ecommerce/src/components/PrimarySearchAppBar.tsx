@@ -1,4 +1,4 @@
-import { styled, alpha } from "@mui/material/styles";
+import { styled, alpha, useTheme } from "@mui/material/styles";
 import { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -14,7 +14,7 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Switch } from "@mui/material";
+import { Button, Switch, useMediaQuery } from "@mui/material";
 import { useAppTheme } from "./ControlColors";
 import BedtimeOutlinedIcon from "@mui/icons-material/BedtimeOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
@@ -73,6 +73,8 @@ export default function PrimarySearchAppBar() {
   const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(false);
   const { search, handleChange, handleKeyDown } = useFilter();
   const { mode, setMode } = useAppTheme();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
     if (search.length === 0) {
@@ -95,9 +97,26 @@ export default function PrimarySearchAppBar() {
   );
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <AppBar position="static" color="default">
-        <Toolbar sx={{ width: "100%", maxWidth: 1560, mx: "auto" }}>
+    <Box>
+      <AppBar
+        position="static"
+        color="default"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+
+          py: { xs: 1, md: 1.5 },
+        }}
+      >
+        <Toolbar
+          sx={{
+            width: "100%",
+            display: "flex",
+            maxWidth: 1560,
+            mx: "auto",
+            gap: 2,
+          }}
+        >
           <IconButton
             size="large"
             edge="start"
@@ -118,35 +137,41 @@ export default function PrimarySearchAppBar() {
           </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-
-            <StyledInputBase
-              placeholder="Search…"
-              onChange={handleChange}
-              onKeyDown={handleKeyDown}
-              value={search}
-              inputProps={{ "aria-label": "search" }}
+          {!isMobile && (
+            <>
+              <Box sx={{ flexGrow: 1 }} />
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Search…"
+                  onChange={handleChange}
+                  onKeyDown={handleKeyDown}
+                  value={search}
+                  inputProps={{ "aria-label": "search" }}
+                />
+              </Search>
+            </>
+          )}
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <WbSunnyOutlinedIcon />
+            <Switch
+              checked={mode === "dark"}
+              onChange={(event) =>
+                setMode(event.target.checked ? "dark" : "light")
+              }
             />
-          </Search>
-          <WbSunnyOutlinedIcon />
-          <Switch
-            checked={mode === "dark"}
-            onChange={(event) =>
-              setMode(event.target.checked ? "dark" : "light")
-            }
-          />
-          <BedtimeOutlinedIcon />
+            <BedtimeOutlinedIcon />
+          </Box>
           {user ? (
             <>
               <Box
                 sx={{
                   display: {
-                    xs: "none",
+                    xs: "flex",
                     md: "flex",
-                    gap: 1,
+                    gap: 10,
                     alignItems: "center",
                   },
                 }}
@@ -180,17 +205,6 @@ export default function PrimarySearchAppBar() {
                   <ShoppingCartOutlinedIcon />
                 </IconButton>
               </Box>
-              <Box sx={{ display: { xs: "flex", md: "none" } }}>
-                <IconButton
-                  size="large"
-                  aria-label="show more"
-                  aria-haspopup="true"
-                  onClick={() => setIsProfileDrawerOpen(true)}
-                  color="inherit"
-                >
-                  <MoreIcon />
-                </IconButton>
-              </Box>
             </>
           ) : (
             <Button component={Link} to="/login" color="inherit">
@@ -198,7 +212,24 @@ export default function PrimarySearchAppBar() {
             </Button>
           )}
         </Toolbar>
+        {isMobile && (
+          <Box sx={{ pr: 2, pb: 1 }}>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                value={search}
+                inputProps={{ "aria-label": "search" }}
+              />
+            </Search>
+          </Box>
+        )}
       </AppBar>
+
       <FavoriteDrawer
         open={isFavoriteDrawerOpen}
         onClose={() => setIsFavoriteDrawerOpen(false)}

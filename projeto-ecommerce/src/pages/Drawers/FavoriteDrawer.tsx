@@ -6,6 +6,8 @@ import {
   IconButton,
   List,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { useFavorite } from "../../context/FavoritesContext";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
@@ -15,23 +17,36 @@ import { useCart } from "../../context/CartContext";
 import type { TDrawer } from "../../types/TypeDrawer";
 
 export const FavoriteDrawer = ({ open, onClose }: TDrawer) => {
-  const { favorites, addToFavorite, removeFromFavorite } = useFavorite();
+  const { favorites, removeFromFavorite } = useFavorite();
   const { handleAddToCart } = useCart();
+  const theme = useTheme();
+
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  const drawerAnchor = isMobile ? "bottom" : "right";
 
   return (
     <Drawer
-      anchor="right"
+      anchor={drawerAnchor}
       open={open}
       onClose={onClose}
       slotProps={{
         paper: {
-          sx: {
-            m: 2,
-            height: "calc(100% - 32px)",
-            borderRadius: 3,
-            width: 460,
-            overflow: "hidden",
-          },
+          sx: isMobile
+            ? {
+                height: "80vh",
+                maxHeight: "80vh",
+                borderTopLeftRadius: 16,
+                borderTopRightRadius: 16,
+                width: "100%",
+                m: 0,
+              }
+            : {
+                m: 2,
+                height: "calc(100% - 32px)",
+                borderRadius: 3,
+                width: 460,
+              },
         },
       }}
     >

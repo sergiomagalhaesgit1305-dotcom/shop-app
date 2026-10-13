@@ -30,8 +30,8 @@ export const ProductCardComponent = ({ product }: { product: TProduct }) => {
           alignItems: "left",
           textAlign: "left",
           flexGrow: 1,
-          py: 1,
-          px: 1,
+          py: { xs: 1, md: 2 },
+          px: { xs: 1, md: 2 },
           gap: 1,
         }}
       >
@@ -39,7 +39,7 @@ export const ProductCardComponent = ({ product }: { product: TProduct }) => {
           onClick={() => navigate(`/products/${product.id}`)}
           sx={{
             width: "100%",
-            height: 150,
+            height: 200,
             bgcolor: "#ffffff",
             borderRadius: 1,
             p: 1,

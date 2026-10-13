@@ -104,7 +104,6 @@ export default function PrimarySearchAppBar() {
         sx={{
           display: "flex",
           flexDirection: "column",
-
           py: { xs: 1, md: 1.5 },
         }}
       >
@@ -112,27 +111,25 @@ export default function PrimarySearchAppBar() {
           sx={{
             width: "100%",
             display: "flex",
+            justifyContent: "space-between",
             maxWidth: 1560,
             mx: "auto",
-            gap: 2,
+            gap: 1,
           }}
         >
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={() => setIsLeftDrawerOpen(true)}
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
+          {!isMobile && (
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={() => setIsLeftDrawerOpen(true)}
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+          <Typography variant="h6" noWrap component="div">
             MUI
           </Typography>
 
@@ -168,12 +165,9 @@ export default function PrimarySearchAppBar() {
             <>
               <Box
                 sx={{
-                  display: {
-                    xs: "flex",
-                    md: "flex",
-                    gap: 10,
-                    alignItems: "center",
-                  },
+                  display: "flex",
+                  alignItems: "center",
+                  gap: { xs: 0, md: 1 },
                 }}
               >
                 <IconButton
@@ -204,6 +198,17 @@ export default function PrimarySearchAppBar() {
                 >
                   <ShoppingCartOutlinedIcon />
                 </IconButton>
+                {isMobile && (
+                  <IconButton
+                    size="large"
+                    edge="end"
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={() => setIsLeftDrawerOpen(true)}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                )}
               </Box>
             </>
           ) : (

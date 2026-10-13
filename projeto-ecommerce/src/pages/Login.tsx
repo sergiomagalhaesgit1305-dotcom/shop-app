@@ -68,31 +68,31 @@ export const Login = () => {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        maxWidth: 1560,
+        mx: "auto",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         bgcolor: "background.default",
         color: "text.primary",
-        p: 2,
+        px: { xs: 4 },
+        mt: { xs: 5, md: 5 },
         gap: 2,
       }}
     >
       <Box
         sx={{
           display: "flex",
-          gap: 2,
-          alignItems: "stretch",
+          flexDirection: { xs: "column", md: "row" },
+          gap: 5,
           width: "100%",
-          maxWidth: 900,
           justifyContent: "center",
         }}
       >
         <Card
           sx={{
             flex: 1,
-            maxWidth: 440,
             display: "flex",
             flexDirection: "column",
             borderRadius: 2,
@@ -114,6 +114,7 @@ export const Login = () => {
                 display: "flex",
                 flexDirection: "column",
                 flex: 1,
+                gap: 2,
               }}
             >
               <Typography
@@ -163,7 +164,6 @@ export const Login = () => {
         <Card
           sx={{
             flex: 1,
-            maxWidth: 440,
             display: "flex",
             flexDirection: "column",
             borderRadius: 2,
@@ -176,6 +176,7 @@ export const Login = () => {
               display: "flex",
               flexDirection: "column",
               flex: 1,
+              gap: 2,
             }}
           >
             <Typography
@@ -190,7 +191,7 @@ export const Login = () => {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                gap: 1,
+                gap: 2,
                 mt: 1,
                 mb: 3,
               }}

@@ -169,7 +169,7 @@ export const FavoriteDrawer = ({ open, onClose }: TDrawer) => {
             >
               <Button
                 component={Link}
-                to="/me/favoritos"
+                to="/profile/favoritos"
                 onClick={onClose}
                 fullWidth
                 sx={{

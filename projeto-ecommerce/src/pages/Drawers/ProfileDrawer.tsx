@@ -71,7 +71,7 @@ export const ProfileDrawer = ({ open, onClose }: TDrawer) => {
             >
               <Button
                 component={Link}
-                to="/me/encomendas"
+                to="/profile/encomendas"
                 onClick={onClose}
                 variant="outlined"
                 color="inherit"
@@ -87,7 +87,7 @@ export const ProfileDrawer = ({ open, onClose }: TDrawer) => {
               </Button>
               <Button
                 component={Link}
-                to="/me/dados"
+                to="/profile/dados"
                 onClick={onClose}
                 variant="outlined"
                 color="inherit"
@@ -103,7 +103,7 @@ export const ProfileDrawer = ({ open, onClose }: TDrawer) => {
               </Button>
               <Button
                 component={Link}
-                to="/me/favoritos"
+                to="/profile/favoritos"
                 onClick={onClose}
                 variant="outlined"
                 color="inherit"

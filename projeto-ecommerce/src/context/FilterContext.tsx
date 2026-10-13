@@ -41,7 +41,12 @@ export const FilterProvider = ({ children }: TChildren) => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
+    const value = e.target.value;
+    setSearch(value);
+
+    if (value.length > 0) {
+      setSelectedSubcategory(null);
+    }
     navigate("/products");
   };
 

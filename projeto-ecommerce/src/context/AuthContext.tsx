@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }: TChildren) => {
   const { data: user = null } = useQuery<User | null>({
     queryKey: ["user"],
     queryFn: async () => {
-      const response = await fetch(`${API_URL}/me`, {
+      const response = await fetch(`${API_URL}/profile`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }: TChildren) => {
 
   const { mutate: UpdateUsername } = useMutation({
     mutationFn: async () => {
-      const response = await fetch(`${API_URL}/me`, {
+      const response = await fetch(`${API_URL}/profile`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username }),
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }: TChildren) => {
         anchorOrigin: { vertical: "bottom", horizontal: "right" },
       });
 
-      navigate("/me");
+      navigate("/profile");
     },
 
     onError: () => {

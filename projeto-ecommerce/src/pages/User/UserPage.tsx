@@ -3,12 +3,7 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
-type TValueButton = "Encomendas" | "Dados" | "Favoritos" | "Avaliacao";
-
 export const UserPage = () => {
-  const [selectedButton, setSelectedButton] =
-    useState<TValueButton>("Encomendas");
-
   return (
     <Box sx={{ width: "100%", mx: "auto", maxWidth: 1560, px: { md: 2 } }}>
       <Box sx={{ display: "flex", flexDirection: "row", gap: 3, mt: 4 }}>
@@ -18,7 +13,7 @@ export const UserPage = () => {
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                 <Button
                   component={Link}
-                  to="/me/encomendas"
+                  to="/profile/encomendas"
                   variant="outlined"
                   color="inherit"
                   sx={{
@@ -33,7 +28,7 @@ export const UserPage = () => {
                 </Button>
                 <Button
                   component={Link}
-                  to="/me/dados"
+                  to="/profile/dados"
                   variant="outlined"
                   color="inherit"
                   sx={{
@@ -48,7 +43,7 @@ export const UserPage = () => {
                 </Button>
                 <Button
                   component={Link}
-                  to="/me/favoritos"
+                  to="/profile/favoritos"
                   variant="outlined"
                   color="inherit"
                   sx={{ justifyContent: "left", p: 2, gap: 1 }}
@@ -57,7 +52,6 @@ export const UserPage = () => {
                   <Typography>Favoritos</Typography>
                 </Button>
                 <Button
-                  onClick={() => setSelectedButton("Avaliacao")}
                   variant="outlined"
                   color="inherit"
                   sx={{ justifyContent: "left", p: 2, gap: 1 }}

@@ -23,7 +23,7 @@ export const useUpdatePassword = () => {
 
   const { mutate: handleNewPassword } = useMutation({
     mutationFn: async () => {
-      const response = await fetch(`${API_URL}/me/update-password`, {
+      const response = await fetch(`${API_URL}/profile/update-password`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userPassword, newPassword }),

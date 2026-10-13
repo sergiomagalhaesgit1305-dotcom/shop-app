@@ -115,7 +115,7 @@ app.post("/login", async (req, res) => {
   res.json({ user: profileData, session: authData.session });
 });
 
-app.patch("/me/update-password", async (req, res) => {
+app.patch("/profile/update-password", async (req, res) => {
   const { userPassword, newPassword } = req.body;
   const token = req.cookies.access_token;
 
@@ -154,7 +154,7 @@ app.patch("/me/update-password", async (req, res) => {
   return res.json({ message: "Password atualizada com sucesso", data });
 });
 
-app.get("/me", async (req, res) => {
+app.get("/profile", async (req, res) => {
   const token = req.cookies.access_token;
 
   if (!token) {

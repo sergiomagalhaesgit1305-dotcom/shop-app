@@ -1,9 +1,10 @@
 import { Breadcrumbs, Link as MuiLink, Typography, Box } from "@mui/material";
 import { Link as RouterLink, useLocation } from "react-router-dom";
+import { useProduct } from "../context/ProductsContext";
 
 export const DynamicBreadcrumbs = () => {
   const location = useLocation();
-
+  const { products } = useProduct();
   const pathnames = location.pathname.split("/").filter((x) => x);
 
   if (pathnames.length === 0) return null;
@@ -25,7 +26,19 @@ export const DynamicBreadcrumbs = () => {
         {pathnames.map((value, index) => {
           const last = index === pathnames.length - 1;
           const to = `/${pathnames.slice(0, index + 1).join("/")}`;
-          const displayName = value;
+
+          let displayName = value;
+
+          if (!isNaN(Number(value))) {
+            const foundProduct = products.find(
+              (p: any) => p.id === Number(value),
+            );
+            if (foundProduct) displayName = foundProduct.name;
+          } else {
+            displayName = value
+              .replace(/-/g, " ")
+              .replace(/\b\w/g, (char) => char.toUpperCase());
+          }
 
           return last ? (
             <Typography color="text.primary" key={to}>

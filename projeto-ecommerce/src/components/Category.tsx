@@ -61,7 +61,7 @@ export const Category = () => {
         <CardContent
           sx={{
             display: "flex",
-            gap: 10,
+            gap: { xs: 8, md: 10 },
             px: 5,
             overflowX: "auto",
             scrollSnapType: "x mandatory",

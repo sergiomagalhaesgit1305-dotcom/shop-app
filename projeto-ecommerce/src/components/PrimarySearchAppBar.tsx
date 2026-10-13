@@ -104,6 +104,7 @@ export default function PrimarySearchAppBar() {
         sx={{
           display: "flex",
           flexDirection: "column",
+          alignItems: "center",
           py: { xs: 1, md: 1.5 },
         }}
       >
@@ -135,8 +136,7 @@ export default function PrimarySearchAppBar() {
 
           <Box sx={{ flexGrow: 1 }} />
           {!isMobile && (
-            <>
-              <Box sx={{ flexGrow: 1 }} />
+            <Box sx={{ flexGrow: 1 }}>
               <Search>
                 <SearchIconWrapper>
                   <SearchIcon />
@@ -149,7 +149,7 @@ export default function PrimarySearchAppBar() {
                   inputProps={{ "aria-label": "search" }}
                 />
               </Search>
-            </>
+            </Box>
           )}
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <WbSunnyOutlinedIcon />
@@ -218,7 +218,7 @@ export default function PrimarySearchAppBar() {
           )}
         </Toolbar>
         {isMobile && (
-          <Box sx={{ pr: 2, pb: 1 }}>
+          <Box sx={{ width: "100%", px: 2, pb: 1 }}>
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import Laptop from "../assets/Laptop.jpg";
@@ -23,6 +23,14 @@ export const Carrosel = () => {
       return prevIndex - 1;
     });
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      showNextImage();
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, [imageIndex]);
 
   return (
     <Box

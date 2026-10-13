@@ -5,6 +5,8 @@ import {
   Drawer,
   IconButton,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
@@ -15,21 +17,33 @@ import { Link } from "react-router-dom";
 
 export const ProfileDrawer = ({ open, onClose }: TDrawer) => {
   const { user, logout } = useAuth();
+  const theme = useTheme();
 
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  const drawerAnchor = isMobile ? "bottom" : "right";
   return (
     <Drawer
-      anchor="right"
+      anchor={drawerAnchor}
       open={open}
       onClose={onClose}
       slotProps={{
         paper: {
-          sx: {
-            m: 2,
-            height: "calc(100% - 32px)",
-            borderRadius: 3,
-            width: 460,
-            overflow: "hidden",
-          },
+          sx: isMobile
+            ? {
+                height: "80vh",
+                maxHeight: "80vh",
+                borderTopLeftRadius: 16,
+                borderTopRightRadius: 16,
+                width: "100%",
+                m: 0,
+              }
+            : {
+                m: 2,
+                height: "calc(100% - 32px)",
+                borderRadius: 3,
+                width: 460,
+              },
         },
       }}
     >

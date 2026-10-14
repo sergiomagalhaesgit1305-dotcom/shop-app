@@ -9,14 +9,15 @@ type TSearchContext = {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   filteredProducts: TProduct[];
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  selectedSubcategory: string | null;
   selectSubcategory: (subcategory: string) => void;
+  selectCategory: (category: string) => void;
 };
 
 const FilterContext = createContext<TSearchContext | undefined>(undefined);
 
 export const FilterProvider = ({ children }: TChildren) => {
   const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(
     null,
   );
@@ -32,11 +33,20 @@ export const FilterProvider = ({ children }: TChildren) => {
       ? item.sub_category === selectedSubcategory
       : true;
 
-    return searchProduct && subCategory;
+    const category = selectedCategory
+      ? item.category === selectedCategory
+      : true;
+
+    return searchProduct && category && subCategory;
   });
 
   const selectSubcategory = (subcategory: string) => {
     setSelectedSubcategory(subcategory);
+    navigate("/products");
+  };
+
+  const selectCategory = (category: string) => {
+    setSelectedCategory(category);
     navigate("/products");
   };
 
@@ -46,6 +56,7 @@ export const FilterProvider = ({ children }: TChildren) => {
 
     if (value.length > 0) {
       setSelectedSubcategory(null);
+      setSelectedCategory(null);
     }
     navigate("/products");
   };
@@ -60,10 +71,10 @@ export const FilterProvider = ({ children }: TChildren) => {
       value={{
         search,
         handleChange,
-        selectedSubcategory,
-        selectSubcategory,
         filteredProducts,
         handleKeyDown,
+        selectCategory,
+        selectSubcategory,
       }}
     >
       {children}

@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import { Carrosel } from "../components/Carrosel";
-import { Category } from "../components/Category";
+import { SubCategory } from "../components/SubCategory";
 import { useProduct } from "../context/ProductsContext";
 import Laptop from "../assets/LaptopImageForHome.jpg";
 import { ProductCardComponent } from "../components/ProductCardComponent";
@@ -32,7 +32,7 @@ export const Home = () => {
     <Box sx={{ width: "100%", maxWidth: 1560, mx: "auto" }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <Carrosel />
-        <Category />
+        <SubCategory />
         <Card sx={{ bgcolor: "background.paper" }}>
           <CardContent sx={{ m: 1 }}>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>

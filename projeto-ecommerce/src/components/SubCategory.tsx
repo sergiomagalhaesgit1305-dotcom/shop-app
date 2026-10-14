@@ -16,7 +16,7 @@ import HeadPhones from "../assets/Images/headphones.jpeg";
 import Roupa from "../assets/Images/Roupa.jpg";
 import { useFilter } from "../context/FilterContext";
 
-const category = [
+const subCategory = [
   {
     id: 1,
     selectedSubcategory: "Computers",
@@ -52,7 +52,7 @@ const category = [
   { id: 8, selectedSubcategory: "Footwear", name: "Calçado", image: Calcado },
 ];
 
-export const Category = () => {
+export const SubCategory = () => {
   const { selectSubcategory } = useFilter();
 
   return (
@@ -70,7 +70,7 @@ export const Category = () => {
             scrollbarWidth: "none",
           }}
         >
-          {category.map((item) => (
+          {subCategory.map((item) => (
             <Button
               key={item.id}
               onClick={() => selectSubcategory(item.selectedSubcategory)}

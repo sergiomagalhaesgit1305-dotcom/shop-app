@@ -1,14 +1,23 @@
 import { useFilter } from "../context/FilterContext";
 import { Box } from "@mui/material";
 import { ProductCardComponent } from "../components/ProductCardComponent";
+import { Loading } from "../components/Loading";
+import { useProduct } from "../context/ProductsContext";
 
 export const ProductPage = () => {
-  const { filteredProducts, isLoading, isError } = useFilter();
+  const { filteredProducts } = useFilter();
+  const { isLoading, isError } = useProduct();
 
   return (
     <Box
       sx={{ width: "100%", mx: "auto", maxWidth: 1560, px: { xs: 2, md: 2 } }}
     >
+      <Box
+        sx={{ width: "100%", alignItems: "center", justifyContent: "center" }}
+      >
+        {isLoading && <Loading />}
+      </Box>
+
       <Box
         sx={{
           mt: 2,

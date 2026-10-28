@@ -19,6 +19,7 @@ export const Login = () => {
 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -38,12 +39,16 @@ export const Login = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to post data");
+        const errorData = await response.json();
+        const message = errorData.message || "Falha ao iniciar sessão";
+        setErrorMessage(message);
+        throw new Error(message);
       }
 
       return await response.json();
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
+      setErrorMessage("");
       queryClient.invalidateQueries({ queryKey: ["user"] });
       queryClient.invalidateQueries({ queryKey: ["cart"] });
       navigate("/");
@@ -52,8 +57,8 @@ export const Login = () => {
         anchorOrigin: { vertical: "bottom", horizontal: "right" },
       });
     },
-    onError: () => {
-      enqueueSnackbar("Nao foi possivel iniciar sessão", {
+    onError: (error: Error) => {
+      enqueueSnackbar(error.message, {
         variant: "error",
         anchorOrigin: { vertical: "bottom", horizontal: "right" },
       });
@@ -130,6 +135,7 @@ export const Login = () => {
                 type="email"
                 value={email}
                 onChange={handleEmailChange}
+                error={Boolean(errorMessage)}
                 label="Email"
                 variant="outlined"
                 fullWidth
@@ -140,6 +146,8 @@ export const Login = () => {
                 type="password"
                 value={password}
                 onChange={handlePasswordChange}
+                error={Boolean(errorMessage)}
+                helperText={errorMessage}
                 label="Password"
                 variant="outlined"
                 fullWidth

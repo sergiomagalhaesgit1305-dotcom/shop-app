@@ -14,6 +14,7 @@ export const ProductProvider = ({ children }: TChildren) => {
   } = useQuery<TProduct[]>({
     queryKey: ["products"],
     queryFn: async () => {
+      await new Promise((resolve) => setTimeout(resolve, 10000));
       const response = await fetch(`${API_URL}/products`);
 
       if (!response.ok) {
@@ -24,6 +25,7 @@ export const ProductProvider = ({ children }: TChildren) => {
       return data;
     },
   });
+
   return (
     <ProductContext.Provider
       value={{

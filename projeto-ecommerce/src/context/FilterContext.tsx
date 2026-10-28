@@ -11,8 +11,6 @@ type TSearchContext = {
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   selectSubcategory: (subcategory: string) => void;
   selectCategory: (category: string) => void;
-  isLoading: boolean;
-  isError: boolean;
 };
 
 const FilterContext = createContext<TSearchContext | undefined>(undefined);
@@ -23,7 +21,7 @@ export const FilterProvider = ({ children }: TChildren) => {
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(
     null,
   );
-  const { products, isLoading, isError } = useProduct();
+  const { products } = useProduct();
   const navigate = useNavigate();
 
   const filteredProducts = products.filter((item) => {
@@ -68,6 +66,7 @@ export const FilterProvider = ({ children }: TChildren) => {
       navigate("/products");
     }
   };
+
   return (
     <FilterContext.Provider
       value={{
@@ -77,8 +76,6 @@ export const FilterProvider = ({ children }: TChildren) => {
         handleKeyDown,
         selectCategory,
         selectSubcategory,
-        isLoading,
-        isError,
       }}
     >
       {children}

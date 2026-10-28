@@ -1,14 +1,26 @@
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { ProfileTitle } from "../../components/ProfileTitle";
+import { useIsMobile } from "../../components/useIsMobile";
 
 export const UserPage = () => {
+  const isMobile = useIsMobile();
   return (
-    <Box sx={{ width: "100%", mx: "auto", maxWidth: 1560, px: { md: 2 } }}>
-      <Box sx={{ display: "flex", flexDirection: "row", gap: 3, mt: 4 }}>
-        <Box sx={{ flex: 1, gap: 2, maxWidth: 400 }}>
-          <Card sx={{ mt: 9.5 }}>
+    <Box
+      sx={{ width: "100%", mx: "auto", maxWidth: 1560, px: { xs: 2, md: 2 } }}
+    >
+      {isMobile && <ProfileTitle />}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          gap: 3,
+          mt: { xs: 2, md: 4 },
+        }}
+      >
+        <Box sx={{ flex: 1, gap: 2, maxWidth: { xs: "100%", md: 400 } }}>
+          <Card sx={{ mt: { xs: 0, md: 9.5 } }}>
             <CardContent>
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                 <Button

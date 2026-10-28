@@ -11,6 +11,8 @@ import {
   RadioGroup,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { FormBox } from "../../components/FormBox";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -19,6 +21,8 @@ import { useAuth } from "../../context/AuthContext";
 import { useAddress } from "../../context/AddressContext";
 import { useUpdatePassword } from "../../components/ChangePassword";
 import { useState } from "react";
+import { ProfileTitle } from "../../components/ProfileTitle";
+import { useIsMobile } from "../../components/useIsMobile";
 
 export const PersonalDetails = () => {
   const { user } = useAuth();
@@ -48,30 +52,21 @@ export const PersonalDetails = () => {
   } = useUpdatePassword();
 
   const [open, setOpen] = useState<boolean>(false);
-
+  const isMobile = useIsMobile();
   return (
-    <>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 1,
-          maxWidth: 1560,
-        }}
-      >
-        <Typography variant="body2" color="text.secondary">
-          {user?.username}
-        </Typography>
-
-        <Box sx={{ borderLeft: "4px solid #ff5722", pl: 1 }}>
-          <Typography variant="h5">Dados Pessoais</Typography>
-        </Box>
-      </Box>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+      }}
+    >
+      {!isMobile && <ProfileTitle />}
       <Box
         sx={{
           flex: 1,
           display: "flex",
-          flexDirection: "row",
+          flexDirection: { xs: "column", md: "row" },
           gap: 2,
         }}
       >
@@ -193,14 +188,14 @@ export const PersonalDetails = () => {
                             sx={{
                               display: "flex",
                               flexDirection: "column",
-                              gap: 1,
+                              gap: { xs: 0, md: 1 },
                             }}
                           >
                             <Box
                               sx={{
                                 display: "flex",
-                                flexDirection: "row",
-                                gap: 2,
+                                flexDirection: { xs: "column", md: "row" },
+                                gap: { xs: 0, md: 2 },
                               }}
                             >
                               <Typography>Nome: {user?.username}</Typography>
@@ -209,8 +204,8 @@ export const PersonalDetails = () => {
                             <Box
                               sx={{
                                 display: "flex",
-                                flexDirection: "row",
-                                gap: 1,
+                                flexDirection: { xs: "column", md: "row" },
+                                gap: { xs: 0, md: 2 },
                               }}
                             >
                               <Typography>
@@ -362,6 +357,6 @@ export const PersonalDetails = () => {
           </CardContent>
         </Card>
       </Box>
-    </>
+    </Box>
   );
 };

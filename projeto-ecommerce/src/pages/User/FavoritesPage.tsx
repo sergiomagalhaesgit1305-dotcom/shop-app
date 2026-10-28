@@ -1,14 +1,15 @@
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import { useFavorite } from "../../context/FavoritesContext";
 import { useCart } from "../../context/CartContext";
-import { useAuth } from "../../context/AuthContext";
 import { FormatedPrice } from "../../utils/FormatPrice";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { ProfileTitle } from "../../components/ProfileTitle";
+import { useIsMobile } from "../../components/useIsMobile";
 
 export const FavoritesPage = () => {
-  const { user } = useAuth();
   const { favorites, removeFromFavorite } = useFavorite();
   const { handleAddToCart } = useCart();
+  const isMobile = useIsMobile();
   return (
     <Box
       sx={{
@@ -17,15 +18,7 @@ export const FavoritesPage = () => {
         gap: 1,
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-        <Typography variant="body2" color="text.secondary">
-          {user?.username}
-        </Typography>
-
-        <Box sx={{ borderLeft: "4px solid #ff5722", pl: 1 }}>
-          <Typography variant="h5">Favoritos</Typography>
-        </Box>
-      </Box>
+      {!isMobile && <ProfileTitle />}
       <Box>
         {favorites.length === 0 && (
           <Typography>

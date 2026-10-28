@@ -1,8 +1,8 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useRef } from "react";
 import type { TChildren } from "../types/TypeChildren";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "../API_URL";
-import { enqueueSnackbar } from "notistack";
+import { closeSnackbar, enqueueSnackbar } from "notistack";
 import type { TCart, TCartContext, TCartOrder } from "../types/TypeCart";
 import { useAuth } from "./AuthContext";
 
@@ -11,6 +11,7 @@ const CartContext = createContext<TCartContext | undefined>(undefined);
 export const CartProvider = ({ children }: TChildren) => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const loadingSnackbarRef = useRef<number | string | null>(null);
 
   const { data } = useQuery<TCart[]>({
     queryKey: ["cart"],
@@ -49,7 +50,22 @@ export const CartProvider = ({ children }: TChildren) => {
 
       return await response.json();
     },
+    onMutate: () => {
+      loadingSnackbarRef.current = enqueueSnackbar(
+        "A adicionar ao carrinho...",
+        {
+          variant: "info",
+          persist: true,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        },
+      );
+    },
     onSuccess: () => {
+      if (loadingSnackbarRef.current !== null) {
+        closeSnackbar(loadingSnackbarRef.current);
+        loadingSnackbarRef.current = null;
+      }
+
       queryClient.invalidateQueries({ queryKey: ["cart"] });
 
       enqueueSnackbar("Produto adicionado ao carrinho com sucesso!", {
@@ -58,6 +74,10 @@ export const CartProvider = ({ children }: TChildren) => {
       });
     },
     onError: () => {
+      if (loadingSnackbarRef.current !== null) {
+        closeSnackbar(loadingSnackbarRef.current);
+        loadingSnackbarRef.current = null;
+      }
       enqueueSnackbar("Nao foi possivel adicionar o produto ao carrinho!", {
         variant: "error",
         anchorOrigin: { vertical: "bottom", horizontal: "right" },
@@ -138,7 +158,7 @@ export const CartProvider = ({ children }: TChildren) => {
     },
   });
 
-  const { mutate: handleRemoveItem } = useMutation({
+  const { mutate: handleRemoveItemMutation } = useMutation({
     mutationFn: async (product_id: string) => {
       const response = await fetch(`${API_URL}/cart/${product_id}`, {
         method: "DELETE",
@@ -166,6 +186,20 @@ export const CartProvider = ({ children }: TChildren) => {
       });
     },
   });
+
+  const handleRemoveItem = (product_id: string) => {
+    if (!user) {
+      enqueueSnackbar(
+        "Para remover o produto do carrinho tem que ter a sessão iniciada.",
+        {
+          variant: "info",
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        },
+      );
+      return;
+    }
+    handleRemoveItemMutation(product_id);
+  };
 
   return (
     <CartContext.Provider

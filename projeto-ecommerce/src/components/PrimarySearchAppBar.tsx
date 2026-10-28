@@ -22,6 +22,7 @@ import { useFilter } from "../context/FilterContext";
 import { FavoriteDrawer } from "../pages/Drawers/FavoriteDrawer";
 import { ProfileDrawer } from "../pages/Drawers/ProfileDrawer";
 import { LeftDrawer } from "../pages/Drawers/LeftDrawer";
+import { useIsMobile } from "./useIsMobile";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -72,8 +73,7 @@ export default function PrimarySearchAppBar() {
   const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(false);
   const { search, handleChange, handleKeyDown } = useFilter();
   const { mode, setMode } = useAppTheme();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (search.length === 0) {

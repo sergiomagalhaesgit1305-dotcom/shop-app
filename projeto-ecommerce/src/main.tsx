@@ -9,7 +9,7 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <SnackbarProvider maxSnack={3} autoHideDuration={4000}>
+      <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
         <App />
       </SnackbarProvider>
     </QueryClientProvider>

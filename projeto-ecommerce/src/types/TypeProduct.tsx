@@ -11,4 +11,6 @@ export type TProduct = {
 
 export type TProductContext = {
   products: TProduct[];
+  isLoading: boolean;
+  isError: boolean;
 };

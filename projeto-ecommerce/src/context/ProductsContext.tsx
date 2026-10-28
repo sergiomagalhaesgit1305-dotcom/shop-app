@@ -7,7 +7,11 @@ import type { TProduct, TProductContext } from "../types/TypeProduct";
 const ProductContext = createContext<TProductContext | undefined>(undefined);
 
 export const ProductProvider = ({ children }: TChildren) => {
-  const { data: products = [] } = useQuery<TProduct[]>({
+  const {
+    data: products = [],
+    isLoading,
+    isError,
+  } = useQuery<TProduct[]>({
     queryKey: ["products"],
     queryFn: async () => {
       const response = await fetch(`${API_URL}/products`);
@@ -24,6 +28,8 @@ export const ProductProvider = ({ children }: TChildren) => {
     <ProductContext.Provider
       value={{
         products,
+        isLoading,
+        isError,
       }}
     >
       {children}

@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import { ProductCardComponent } from "../components/ProductCardComponent";
 
 export const ProductPage = () => {
-  const { filteredProducts } = useFilter();
+  const { filteredProducts, isLoading, isError } = useFilter();
 
   return (
     <Box

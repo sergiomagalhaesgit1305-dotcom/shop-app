@@ -3,17 +3,17 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Divider,
   Typography,
 } from "@mui/material";
 import { useOrder } from "../../context/OrderContext";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import { useAuth } from "../../context/AuthContext";
 import { FormatedPrice } from "../../utils/FormatPrice";
+import { ProfileTitle } from "../../components/ProfileTitle";
+import { useIsMobile } from "../../components/useIsMobile";
 
 export const OrderHistoryPage = () => {
   const { order } = useOrder();
-  const { user } = useAuth();
+  const isMobile = useIsMobile();
 
   const hasOrders = order && order.length > 0;
 
@@ -29,15 +29,7 @@ export const OrderHistoryPage = () => {
         gap: 2,
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-        <Typography variant="body2" color="text.secondary">
-          {user?.username}
-        </Typography>
-
-        <Box sx={{ borderLeft: "4px solid #ff5722", pl: 1 }}>
-          <Typography variant="h5">Encomendas</Typography>
-        </Box>
-      </Box>
+      {!isMobile && <ProfileTitle />}
       {!hasOrders ? (
         <Box sx={{ py: 4, textAlign: "center" }}>
           <Typography color="text.secondary">

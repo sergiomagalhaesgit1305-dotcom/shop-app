@@ -1,8 +1,8 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "../API_URL";
 import type { TChildren } from "../types/TypeChildren";
-import { enqueueSnackbar } from "notistack";
+import { closeSnackbar, enqueueSnackbar } from "notistack";
 import type {
   AddFavorite,
   TFavorite,
@@ -15,8 +15,9 @@ const FavoriteContext = createContext<TFavoriteContext | undefined>(undefined);
 
 export const FavoriteProvider = ({ children }: TChildren) => {
   const { user } = useAuth();
-  const queryCLient = useQueryClient();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const loadingSnackbarRef = useRef<number | string | null>(null);
 
   const { data: favorites = [] } = useQuery<TFavorite[]>({
     queryKey: ["favorites"],
@@ -51,8 +52,23 @@ export const FavoriteProvider = ({ children }: TChildren) => {
 
       return await response.json();
     },
+    onMutate: () => {
+      loadingSnackbarRef.current = enqueueSnackbar(
+        "A adicionar aos favoritos...",
+        {
+          variant: "info",
+          persist: true,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        },
+      );
+    },
     onSuccess: () => {
-      queryCLient.invalidateQueries({ queryKey: ["favorites"] });
+      if (loadingSnackbarRef.current !== null) {
+        closeSnackbar(loadingSnackbarRef.current);
+        loadingSnackbarRef.current = null;
+      }
+
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
 
       enqueueSnackbar("Produto adicionado aos Favoritos com sucesso!", {
         variant: "success",
@@ -60,6 +76,11 @@ export const FavoriteProvider = ({ children }: TChildren) => {
       });
     },
     onError: () => {
+      if (loadingSnackbarRef.current !== null) {
+        closeSnackbar(loadingSnackbarRef.current);
+        loadingSnackbarRef.current = null;
+      }
+
       enqueueSnackbar("Nao foi possivel adicionar o produto aos favoritos", {
         variant: "error",
         anchorOrigin: { vertical: "bottom", horizontal: "right" },
@@ -81,7 +102,7 @@ export const FavoriteProvider = ({ children }: TChildren) => {
     addToFavoriteMutation(data);
   };
 
-  const { mutate: removeFromFavorite } = useMutation({
+  const { mutate: removeFromFavoriteMutation } = useMutation({
     mutationFn: async (product_id: string) => {
       const response = await fetch(`${API_URL}/favorites/${product_id}`, {
         method: "DELETE",
@@ -95,8 +116,23 @@ export const FavoriteProvider = ({ children }: TChildren) => {
 
       return await response.json();
     },
+    onMutate: () => {
+      loadingSnackbarRef.current = enqueueSnackbar(
+        "A remover produtos dos favoritos...",
+        {
+          variant: "info",
+          persist: true,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        },
+      );
+    },
     onSuccess: () => {
-      queryCLient.invalidateQueries({ queryKey: ["favorites"] });
+      if (loadingSnackbarRef.current !== null) {
+        closeSnackbar(loadingSnackbarRef.current);
+        loadingSnackbarRef.current = null;
+      }
+
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
 
       enqueueSnackbar("Produto removido dos Favoritos com sucesso!", {
         variant: "info",
@@ -104,12 +140,31 @@ export const FavoriteProvider = ({ children }: TChildren) => {
       });
     },
     onError: () => {
+      if (loadingSnackbarRef.current !== null) {
+        closeSnackbar(loadingSnackbarRef.current);
+        loadingSnackbarRef.current = null;
+      }
+
       enqueueSnackbar("Nao foi possivel remover o produto dos favoritos", {
         variant: "error",
         anchorOrigin: { vertical: "bottom", horizontal: "right" },
       });
     },
   });
+
+  const removeFromFavorite = (product_id: string) => {
+    if (!user) {
+      enqueueSnackbar(
+        "Para remover produtos dos favoritos tem que ter a sessão iniciada.",
+        {
+          variant: "info",
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        },
+      );
+      return navigate("/login");
+    }
+    removeFromFavoriteMutation(product_id);
+  };
 
   return (
     <FavoriteContext.Provider
